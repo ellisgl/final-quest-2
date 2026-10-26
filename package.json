@@ -8,7 +8,7 @@
   "dependencies": {
     "@fq2ts/engine": "github:ellisgl/fq2ts-engine#f8066accf40f0a0fdecad3afe48a6cdf6f0adfc3",
     "@fq2ts/server": "github:ellisgl/fq2ts-server#v0.1.0",
-    "@fq2ts/tools": "github:ellisgl/fq2ts-tools#v0.1.0"
+    "@fq2ts/tools": "github:ellisgl/fq2ts-tools#v0.2.0"
   },
   "overrides": {
     "@fq2ts/engine": "github:ellisgl/fq2ts-engine#f8066accf40f0a0fdecad3afe48a6cdf6f0adfc3"

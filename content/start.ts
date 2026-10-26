@@ -46,6 +46,10 @@ export const shared: Shared = { castleOwners: [], wyrmHp: wyrmMaxHp(1), wyrmLeve
 export type G = ScriptContext<Flags, Shared>;
 export type Script = EngineScript<Flags, Shared>;
 
+// A script with a few words on what it does, which the level editor shows
+// on its tile.
+export const about = (text: string, script: Script): Script => Object.assign(script, { about: text });
+
 // Whether monsters attack at random on wild ground: FQ2_MONSTERS in .env (or
 // the environment), for the game and the server alike. Off unless it's set.
 export function monstersSetting(value = process.env['FQ2_MONSTERS']): boolean {

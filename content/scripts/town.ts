@@ -1,7 +1,7 @@
 // Town services: berries, banks, travel offices, Master Roshi and the healer.
 
 import type { ItemDef } from '@fq2ts/engine/items';
-import type { G, Script } from '../start.ts';
+import { about, type G, type Script } from '../start.ts';
 
 const CONTINUE = '{lightgreen}<{green}Continue{lightgreen}>';
 
@@ -103,7 +103,7 @@ interface TravelOffice {
 }
 
 export const travelOffice = ({ name, destination, cost, to }: TravelOffice): Script =>
-    async function (g) {
+    about(`travel office: $${cost} to ${destination} (screen ${to[0]} at ${to[1]},${to[2]})`, async function (g) {
         for (;;) {
             g.cls();
             g.print(
@@ -127,7 +127,7 @@ export const travelOffice = ({ name, destination, cost, to }: TravelOffice): Scr
             g.goto(...to);
             return;
         }
-    };
+    });
 
 export async function roshi(g: G): Promise<void> {
     const stats = (): string[] => [

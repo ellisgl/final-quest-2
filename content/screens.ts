@@ -8,14 +8,15 @@
 // script moves them, travels or takes over the screen.
 
 import type { Content, Coord } from '@fq2ts/engine/game';
-import type { Flags, Script, Shared } from './start.ts';
+import { strip } from '@fq2ts/engine/text';
+import { about, type Flags, type Script, type Shared } from './start.ts';
 import { berries, bank, travelOffice, roshi, healer } from './scripts/town.ts';
 import { armourShop, weaponShop } from './scripts/shops.ts';
 import { oldWoman, hotelRunner, hotelGuard, castle, bar, cityGuards } from './scripts/places.ts';
 import { hallOfHeroes, wyrm } from './scripts/realm.ts';
 
-const say = (text: string): Script => (g) => g.write(text);
-const door = (screen: number, x: number, y: number): Script => (g) => g.goto(screen, x, y);
+const say = (text: string): Script => about(`says: ${strip(text)}`, (g) => g.write(text));
+const door = (screen: number, x: number, y: number): Script => about(`door to screen ${screen} at ${x},${y}`, (g) => g.goto(screen, x, y));
 
 // The same trigger on several tiles.
 function tiles(list: readonly Coord[], script: Script): Partial<Record<Coord, Script>> {
@@ -26,7 +27,7 @@ function tiles(list: readonly Coord[], script: Script): Partial<Record<Coord, Sc
     return out;
 }
 
-const sign = (text: string): Script => say(`{green}The Sign Reads:  ${text}`);
+const sign = (text: string): Script => about(`sign: ${strip(text)}`, say(`{green}The Sign Reads:  ${text}`));
 const nightstand = say('{white}A nightstand.');
 const sink = say('{white}A sink.');
 const stove = say('{white}A stove.');
