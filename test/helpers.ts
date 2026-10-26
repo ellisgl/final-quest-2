@@ -38,7 +38,8 @@ export function gameWorld(): World {
 // ---- Games
 
 export function newPlayer(changes: Partial<Player<Flags>> = {}, flags: Partial<Flags> = {}): Player<Flags> {
-    const player = { ...structuredClone(start), ...changes };
+    // No random fights in tests, whatever FQ2_MONSTERS says.
+    const player = { ...structuredClone(start), monsters: false, ...changes };
     player.flags = { ...player.flags, ...flags };
     return player;
 }

@@ -4,6 +4,7 @@
 import type { Player } from '@fq2ts/engine/player';
 import type { Script as EngineScript, ScriptContext } from '@fq2ts/engine/script';
 import { wyrmMaxHp } from './scripts/realm.ts';
+import { envFlag } from './env.ts';
 
 // (A type alias, not an interface, so that it fits the engine's FlagRecord.)
 export type Flags = {
@@ -45,6 +46,12 @@ export const shared: Shared = { castleOwners: [], wyrmHp: wyrmMaxHp(1), wyrmLeve
 export type G = ScriptContext<Flags, Shared>;
 export type Script = EngineScript<Flags, Shared>;
 
+// Whether monsters attack at random on wild ground: FQ2_MONSTERS in .env (or
+// the environment), for the game and the server alike. Off unless it's set.
+export function monstersSetting(value = process.env['FQ2_MONSTERS']): boolean {
+    return envFlag('FQ2_MONSTERS', { on: 'monsters attack at random on wild ground', off: 'no random monsters' }, value);
+}
+
 export const start: Player<Flags> = {
     name: '',
     sex: 'male',
@@ -61,7 +68,7 @@ export const start: Player<Flags> = {
     items: {},
     weapon: null,
     armour: null,
-    monsters: false,
+    monsters: monstersSetting(),
     superhuman: false,
     flags: {
         toiletUsed: false,
@@ -80,8 +87,11 @@ export const start: Player<Flags> = {
 };
 
 // Saves from before the item catalogue kept wildberries and the Port City
-// pass as flags; they're items now.
+// pass as flags; they're items now. And every save follows FQ2_MONSTERS, not
+// what it was saved with.
 export function upgradeSave(saved: unknown, player: Player<Flags>): void {
+    player.monsters = start.monsters;
+
     if (typeof saved !== 'object' || saved === null || !('flags' in saved)) {
         return;
     }

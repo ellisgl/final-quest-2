@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test';
-import { upgradeSave } from '../../content/start.ts';
+import { monstersSetting, start, upgradeSave } from '../../content/start.ts';
 import { newPlayer } from '../helpers.ts';
 
 describe('upgradeSave', () => {
@@ -20,4 +20,30 @@ describe('upgradeSave', () => {
         upgradeSave(saved, player);
         expect(player.items).toEqual({});
     });
+});
+
+describe('monstersSetting', () => {
+    test.each([[''], ['0'], ['false'], ['No']])('%p is off', (value: string) => {
+        expect(monstersSetting(value)).toBe(false);
+    });
+
+    test.each([['1'], ['true'], ['YES']])('%p is on', (value: string) => {
+        expect(monstersSetting(value)).toBe(true);
+    });
+
+    test('names the settings it does have', () => {
+        expect(() => monstersSetting('sometimes')).toThrow(
+            [
+                'FQ2_MONSTERS is "sometimes", which isn\'t one of its settings. In .env, use one of:',
+                '  FQ2_MONSTERS=true   (or 1, yes, in any case): monsters attack at random on wild ground',
+                '  FQ2_MONSTERS=false  (or 0, no, empty, or leave it out): no random monsters',
+            ].join('\n'),
+        );
+    });
+});
+
+test('saves follow the setting, not what they were saved with', () => {
+    const player = newPlayer({ monsters: !start.monsters });
+    upgradeSave({ monsters: player.monsters, flags: {} }, player);
+    expect(player.monsters).toBe(start.monsters);
 });

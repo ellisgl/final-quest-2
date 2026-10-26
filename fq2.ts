@@ -11,7 +11,6 @@ import { Saves } from '@fq2ts/engine/saves';
 import { Game } from '@fq2ts/engine/game';
 import { readGameData } from '@fq2ts/engine/data';
 import { applyMods, loadMods } from '@fq2ts/engine/mods';
-import content from './content/index.ts';
 
 const args = process.argv.slice(2);
 const debug = args.includes('--debug') || args.some((a) => a.toLowerCase() === '-debugmode');
@@ -19,10 +18,11 @@ const modsAt = args.indexOf('--mods');
 const modsDir = resolve(modsAt >= 0 ? (args[modsAt + 1] ?? 'mods') : 'mods');
 const root = import.meta.dir;
 
-// Load (and check) all the data and mods before taking over the terminal,
-// so that errors are readable.
+// Load (and check) all the content, data and mods before taking over the
+// terminal, so that errors (a wrong .env setting, say) are readable.
 let game;
 try {
+    const { default: content } = await import('./content/index.ts');
     const { config, ...data } = readGameData(join(root, 'data'));
     game = new Game({
         term: new Terminal({ name: 'Final Quest 2' }),
