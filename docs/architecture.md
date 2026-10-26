@@ -9,7 +9,7 @@ to write a mod, [mods.md](mods.md).)
 ## The parts
 
 ```
- FQ2TS (this repo)                  hello-quest
+ final-quest-2 (this repo)          hello-quest
    content/  data/  fq2.ts            content.ts  data/  hello.ts
    server.ts  tools/                  tools/
         │                                  │

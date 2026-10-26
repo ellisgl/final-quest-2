@@ -18,8 +18,8 @@ systemd, with the web page behind HTTPS, admins, backups and upgrades.
 sudo useradd --system --create-home --home-dir /srv/fq2 fq2
 sudo -u fq2 -i
 curl -fsSL https://bun.sh/install | bash
-git clone https://github.com/ellisgl/FQ2TS.git ~/fq2ts
-cd ~/fq2ts
+git clone https://github.com/ellisgl/final-quest-2.git ~/final-quest-2
+cd ~/final-quest-2
 bun install
 ```
 
@@ -72,7 +72,7 @@ Wants=network-online.target
 
 [Service]
 User=fq2
-WorkingDirectory=/srv/fq2/fq2ts
+WorkingDirectory=/srv/fq2/final-quest-2
 ExecStart=/srv/fq2/.bun/bin/bun run server
 Restart=on-failure
 # The server saves everyone and says goodbye on SIGTERM.
