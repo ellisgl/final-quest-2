@@ -1,7 +1,10 @@
 // The game's fixed screens: title, help, credits, world map legend, status
 // bar and inventory. Text uses the markup described in engine/text.js.
 
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { escapeMarkup } from '@fq2ts/engine/text';
+import { pictureMarkup, readXBin } from '@fq2ts/engine/xbin';
 import { COLORS } from '@fq2ts/engine/screen';
 import { at } from '@fq2ts/engine/assert';
 import type { Config, Content } from '@fq2ts/engine/game';
@@ -9,33 +12,13 @@ import type { Player } from '@fq2ts/engine/player';
 import type { ItemDef } from '@fq2ts/engine/items';
 import type { Flags, G, Shared } from './start.ts';
 
+const art = (name: string): string[] => pictureMarkup(readXBin(readFileSync(join(import.meta.dir, '../data/art', name))));
+const titleArt = art('title.xb');
+
 export const title: Content<Flags, Shared>['title'] = {
-    art: ({ version, revision }) => [
-        String.raw`{y 1}{x 1}{on gray}{sp 35}{white}Main Menu{sp 36}`,
-        String.raw`{y 2}{on gray} {on blue}{sp 78}{on gray} `,
-        String.raw`{y 3}{on gray} {on blue}{sp 31}{yellow}2222222222222222{sp 31}{on gray} `,
-        String.raw`{y 4}{on gray} {on blue}{sp 31}{yellow}              22{sp 31}{on gray} `,
-        String.raw`{y 5}{on gray} {on blue}{lightcyan}    FFFFF  IIIII  N   N    A    L        QQQQQ{yellow}2{lightcyan} U   U  EEEEE  SSSSS  TTTTT    {on gray} `,
-        String.raw`{y 6}{on gray} {on blue}{lightcyan}    F        I    NN  N   A A   L        Q   Q{yellow}2{lightcyan} U   U  E      S        T      {on gray} `,
-        String.raw`{y 7}{on gray} {on blue}{lightcyan}    FFFFF    I    N N N  A   A {yellow}2{lightcyan}L{yellow}22222222{lightcyan}Q{yellow}222{lightcyan}Q{yellow}2{lightcyan} U   U  EEEE   SSSSS    T      {on gray} `,
-        String.raw`{y 8}{on gray} {on blue}{lightcyan}    F        I    N  NN  AAAAA {yellow}2{lightcyan}L        Q Q Q  U   U  E          S    T      {on gray} `,
-        String.raw`{y 9}{on gray} {on blue}{lightcyan}    F      IIIII  N   N  A   A {yellow}2{lightcyan}LLLLL    QQQQQ  UUUUU  EEEEE  SSSSS    T      {on gray} `,
-        String.raw`{y 10}{on gray} {on blue}{sp 31}{yellow}22{lightcyan}           Q{sp 33}{on gray} `,
-        String.raw`{y 11}{on gray} {on blue}{sp 31}{yellow}2222222222222222{sp 31}{on gray} `,
-        String.raw`{y 12}{on gray} {on blue}{sp 78}{on gray} `,
-        String.raw`{y 13}{on gray}{sp 80}`,
-        `{y 13}{on gray}{white}{center}${version} ${revision}`,
-        String.raw`{y 15}{x 13}//{x 24}//{x 31}{on gray}{sp 20}{on black}{x 57}\\{x 68}\\`,
-        String.raw`{y 16}{x 10}////{x 21}////{x 31}{on gray} {on blue}{sp 18}{on gray} {on black}{x 58}\\\\{x 69}\\\\`,
-        String.raw`{y 17}{x 7}/////{x 18}/////{x 31}{on gray} {on blue}{sp 18}{on gray} {on black}{x 60}\\\\\{x 71}\\\\\{sp 0}`,
-        String.raw`{y 18}{x 6}////{x 17}////{x 31}{on gray} {on blue}{sp 18}{on gray} {on black}{x 61}\\\\{x 72}\\\\`,
-        String.raw`{y 19}{x 4}////{x 15}////{x 31}{on gray} {on blue}{sp 18}{on gray} {on black}{x 62}\\\\{x 73}\\\\`,
-        String.raw`{y 20}{x 4}\\\\{x 15}\\\\{x 31}{on gray} {on blue}{sp 18}{on gray} {on black}{x 62}////{x 73}////`,
-        String.raw`{y 21}{x 6}\\\\{x 17}\\\\{x 31}{on gray} {on blue}{sp 18}{on gray} {on black}{x 61}////{x 72}////`,
-        String.raw`{y 22}{x 7}\\\\\{x 18}\\\\\{x 31}{on gray} {on blue}{sp 18}{on gray} {on black}{x 60}/////{x 71}/////`,
-        String.raw`{y 23}{x 10}\\\\{x 21}\\\\{x 31}{on gray} {on blue}{sp 18}{on gray} {on black}{x 58}////{x 69}////`,
-        String.raw`{y 24}{x 13}\\{x 24}\\{x 31}{on gray}{sp 20}{on black}{x 57}//{x 68}//`,
-    ],
+    // The art is drawn in an ANSI editor such as Icy Draw (data/art/title.xb);
+    // the version goes over it.
+    art: ({ version, revision }) => [...titleArt, `{y 13}{on gray}{white}{center}${version} ${revision}`],
     // [label, x, y]; colours are [foreground, background].
     menu: {
         options: [
