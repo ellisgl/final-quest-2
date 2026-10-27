@@ -101,7 +101,9 @@ export default {
   with the game's or another mod's. The game's own flags are in `g.flags`
   (untyped: `g.flags['ownsCastle']`).
 - **`screens`** gives `show` and `at` scripts for any screen, the game's
-  or the mod's own (from `maps/`). Tiles are `"x,y"`.
+  or the mod's own (from `maps/`). Tiles are `"x,y"`. (The game's own
+  screens name their triggers by a character marked on their maps; a mod's
+  maps can't mark them yet, so mods use `at`.)
 - **`events`** are scripts for monsters' after-fight hooks: a monster in
   the mod's monsters.json with `"after": { "won": "eel-prize" }` runs the
   mod's `eel-prize` event when the player beats it.

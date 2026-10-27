@@ -1,4 +1,4 @@
-// The one-off triggers written directly in content/screens.ts.
+// The one-off triggers written directly in content/screens/.
 
 import { describe, expect, test } from 'bun:test';
 import content from '../../content/index.ts';

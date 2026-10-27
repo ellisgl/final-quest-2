@@ -3,7 +3,7 @@
 import type { Content } from '@fq2ts/engine/game';
 import { title, help, credits, worldMapLegend, statusLine, inventory } from './ui.ts';
 import { newGame } from './story.ts';
-import { screens } from './screens.ts';
+import { screens } from './screens/index.ts';
 import { shared, start, upgradeSave, type Flags, type Shared } from './start.ts';
 import { events } from './events.ts';
 import { fame } from './scripts/realm.ts';

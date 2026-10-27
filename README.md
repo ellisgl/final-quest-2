@@ -71,6 +71,8 @@ bun run generate                   # fill every blank outdoor screen with genera
 bun run generate -s 8-10 --seed 7 -p preview.html -n   # try a seed without saving
 bun run view                       # write world.html: the whole world, to open in a browser
 bun run view -s 82,721-726         # only some screens (-o sets the output file, -h for help)
+bun run art export 82              # write screen 82 as data/art/maps/0082.icy, to draw in Icy Draw
+bun run art import 82              # bring it back into data/maps/0082.json (no screens: every .icy there)
 ```
 
 The editor opens on an overview of the whole 80x24 world grid, one cell per screen, coloured by kind. From there you can create, copy, delete and re-kind screens, and press Enter to edit one. Screens are painted with a brush (character, colours, and whether it's solid) using the keyboard or the mouse. Left-drag paints, right-drag selects, and a middle click picks up a cell as the brush. The bottom row is a palette: click the brush for the character picker, a colour to use it, `fg` or `bg` (or press A) to pick from all 256 colours, or HARD/SOFT to switch. In the overview, click a screen to select it and click again to open it. There's a character picker (pages of box drawing, blocks, symbols, arrows, letters and more; or type any character, or give its code point with Tab), rectangle selections with fill, copy and stamp, undo/redo, and overlays for solid cells and trigger tiles. S saves to the map folder, and only screens that changed are rewritten.
@@ -87,6 +89,8 @@ The generator fills outdoor screens with land, water, forest, mountains and wind
 - Towns get a clearing in the middle, left for building by hand.
 - Roads and open ground on a hand-made neighbour carry on across the edge, and any walkable patch that ends up cut off gets a path cleared to it.
 - The same `--seed` always gives the same result, and `--preview` writes an HTML page of the new screens and their neighbours.
+
+`bun run art` puts maps in [Icy Draw](https://github.com/mkrueger/icy_tools/blob/master/crates/icy_draw/README.md). Each screen's file has a layer for each part of it: `Tiles`, the screen as it looks (add more layers over it if you like: they're drawn together, as Icy Draw shows them), then `Terrain` (each cell's letter as in the map files: `.` grass, `f` forest, `m` mountain, `w` water, `r` road, `_` floor, `#` structure; a cell left empty gets the terrain its look suggests), `Solid` (anything drawn there is solid) and `Triggers` (the screen's trigger characters), which start hidden. Import checks every cell and names the file and cell of anything a map can't hold. The screen's name, kind and encounters stay in its map file, and the exported files are a working copy (git ignores them): the maps are still `data/maps/`.
 
 ## Development
 
@@ -111,7 +115,7 @@ This repository is Final Quest 2, a game built on packages that other games can 
 And in this one:
 
 - [fq2.ts](fq2.ts) is the single-player entry point, [server.ts](server.ts) the multiplayer one, and [tools/](tools/) runs the map tools on its maps.
-- [content/](content/) is the game itself: every screen's triggers and all the scripts, written as async TypeScript functions (converted from the original REF files). [content/start.ts](content/start.ts) holds the starting player and the `Flags` type, so a misspelled flag is a compile error.
+- [content/](content/) is the game itself: every screen's triggers and all the scripts, written as async TypeScript functions (converted from the original REF files). [content/screens/](content/screens/) has a file for each screen, named for its number like its map: its triggers are named by a character, and the map's `triggers` rows put each character on its tiles. [content/start.ts](content/start.ts) holds the starting player and the `Flags` type, so a misspelled flag is a compile error.
 - [data/](data/) holds the game data as JSON: `config.json` (from VARS.DAT), `items.json` (the item catalogue), `monsters.json` (monsters and encounter tables, from NOSCR.DAT) and one file per screen in `data/maps/` (from MAPS.DAT, now with screen names and terrain). `data/art/` holds the screens drawn in Icy Draw (see Drawing the screens above).
 - Tests (`bun:test`) sit in each repository's `test/` folder. The packages test themselves on Test Quest ([fixture.ts](https://github.com/ellisgl/fq2ts-engine/blob/main/src/fixture.ts)), a tiny game of four screens and a few triggers, with its data in [fixture/](https://github.com/ellisgl/fq2ts-engine/tree/main/src/fixture), so they don't need Final Quest 2. FQ2's own tests are in [test/](test/): its scripts, data and maps, with its fixtures in [helpers.ts](test/helpers.ts). [content/data.test.ts](test/content/data.test.ts) runs every trigger in the game and checks that it sends the player somewhere real.
 - [mods/](mods/) holds the mods to add to the game, and [docs/mods.md](docs/mods.md) is the guide to writing them ([mods.ts](https://github.com/ellisgl/fq2ts-engine/blob/main/src/mods.ts) is the loader).

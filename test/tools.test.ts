@@ -11,14 +11,14 @@ import content from '../content/index.ts';
 import { gameWorld, tempDir } from './helpers.ts';
 
 test('renders the whole game world', () => {
-    const html = renderHtml(gameWorld(), { triggers: contentTriggers(content) });
+    const html = renderHtml(gameWorld(), { triggers: contentTriggers(content, gameWorld()) });
     expect(html.match(/<figure/g)).toHaveLength(gameWorld().screens().length);
     expect(html).toContain('Screen 82: Stone Valley (town)');
     expect(html).toContain('title="Trigger at 29,17"');
 });
 
 test("contentTriggers lists the game's trigger tiles", () => {
-    const triggers = contentTriggers(content);
+    const triggers = contentTriggers(content, gameWorld());
     expect(triggers.get(82)?.has('29,17')).toBe(true);
     expect(triggers.get(1)).toBeUndefined();
 });

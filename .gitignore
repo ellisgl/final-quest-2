@@ -8,3 +8,6 @@ server-data/
 .env.dev
 .env.test
 plans_and_questions.txt
+
+# Maps exported for Icy Draw (bun run art export); the maps are data/maps.
+data/art/maps/

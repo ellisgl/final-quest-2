@@ -5,7 +5,7 @@
 import { join } from 'node:path';
 import { readFileSync } from 'node:fs';
 import { World } from '@fq2ts/engine/world';
-import { readConfig, type Config, type Game } from '@fq2ts/engine/game';
+import { placeTriggers, readConfig, type Config, type Game } from '@fq2ts/engine/game';
 import { readBestiary, type Bestiary } from '@fq2ts/engine/combat';
 import { readItems, type ItemCatalogue } from '@fq2ts/engine/items';
 import { ScriptContext } from '@fq2ts/engine/script';
@@ -56,9 +56,12 @@ export function scriptContext(setup: GameSetup<Flags, Shared> = {}): { g: Script
     return { g: new ScriptContext(game), game, term };
 }
 
+// The game's screens, with each one's triggers put on the tiles its map marks.
+export const placedScreens = (): typeof content.screens => placeTriggers(content.screens, gameWorld());
+
 // A trigger in the real game's screens table.
 export function trigger(screen: number, x: number, y: number): (g: ScriptContext<Flags, Shared>) => void | Promise<void> {
-    const script = content.screens[screen]?.at?.[`${x},${y}`];
+    const script = placedScreens()[screen]?.at?.[`${x},${y}`];
     if (!script) {
         throw new Error(`No trigger at ${x},${y} on screen ${screen}.`);
     }

@@ -134,7 +134,17 @@ A game gives the engine a `Content` object
 ([content/index.ts](../content/index.ts)): its title
 screen, help, status line, the start player, its opening, its inventory
 screen, and, most of all, `screens`: for each screen, the scripts that run
-when the player steps on a tile (`at`) and when it's drawn (`show`).
+when the player steps on a tile and when it's drawn (`show`).
+
+Final Quest 2 has a file for each screen in
+[content/screens/](../content/screens/), named for its number like its map.
+Its `triggers` are named by a character (`D: door(725, 31, 15)`), and the
+map's `triggers` rows put each character on its tiles: the map says where,
+the content says what. `placeTriggers` (game.ts) turns them into `at`
+scripts, "x,y" for each tile, as the game starts, and stops it with the
+screen named if a character on a map has no trigger, a trigger is on no
+tile, or a tile has two. A screen can also give `at` scripts itself, as
+mods do.
 
 Final Quest 2's title, help, credits and world map legend are pictures
 drawn in Icy Draw ([content/ui.ts](../content/ui.ts) reads `data/art/*.icy`):

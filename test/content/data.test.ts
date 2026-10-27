@@ -6,11 +6,12 @@ import content from '../../content/index.ts';
 import { start, type Flags } from '../../content/start.ts';
 import { MAP_HEIGHT, MAP_WIDTH } from '@fq2ts/engine/world';
 import { ScriptContext } from '@fq2ts/engine/script';
-import { gameWorld, makeGame, newPlayer } from '../helpers.ts';
+import { gameWorld, makeGame, newPlayer, placedScreens } from '../helpers.ts';
 
 const world = gameWorld();
 
-const screens = Object.entries(content.screens).map(([n, s]) => ({ n: Number(n), at: Object.entries(s?.at ?? {}), show: s?.show }));
+const placed = placedScreens();
+const screens = Object.entries(placed).map(([n, s]) => ({ n: Number(n), at: Object.entries(s?.at ?? {}), show: s?.show }));
 
 test('the player starts somewhere real', () => {
     expect(world.has(start.screen)).toBe(true);
@@ -58,7 +59,7 @@ describe.each(flagSets)('with the flags of %s', (_, flags, items) => {
         const [x = 1, y = 1] = xy.split(',').map(Number);
         const { game } = makeGame({ player: newPlayer({ screen: n, x, y, items }, flags), fallback: 'escape' });
         const g = new ScriptContext(game);
-        const script = content.screens[n]?.at?.[`${x},${y}`];
+        const script = placed[n]?.at?.[`${x},${y}`];
         expect(script).toBeDefined();
         await script?.(g);
         const p = game.playing;
