@@ -5,7 +5,7 @@
     "": {
       "name": "final-quest-2",
       "dependencies": {
-        "@fq2ts/engine": "github:ellisgl/fq2ts-engine#67bd0b79dd50bcc5026c68ec9ea218c0f9a33807",
+        "@fq2ts/engine": "github:ellisgl/fq2ts-engine#7e92a00e9a793c0c55606f16ca7ce6d57d1e9f79",
         "@fq2ts/server": "github:ellisgl/fq2ts-server#v0.2.0",
         "@fq2ts/tools": "github:ellisgl/fq2ts-tools#v0.2.0",
       },
@@ -22,7 +22,7 @@
     "ssh2@1.17.0": "patches/ssh2@1.17.0.patch",
   },
   "overrides": {
-    "@fq2ts/engine": "github:ellisgl/fq2ts-engine#67bd0b79dd50bcc5026c68ec9ea218c0f9a33807",
+    "@fq2ts/engine": "github:ellisgl/fq2ts-engine#7e92a00e9a793c0c55606f16ca7ce6d57d1e9f79",
   },
   "packages": {
     "@cacheable/memory": ["@cacheable/memory@2.2.0", "", { "dependencies": { "@cacheable/utils": "^2.5.0", "@keyv/bigmap": "^1.3.1", "hookified": "^1.15.1", "keyv": "^5.6.0" } }, "sha512-CTLKqLItRCEixEAewD3/j9DB3/o96gpTPD4eJ1v+DGOlxZRZncRQkGYqqnAGCscYd6RNeXfGeiuCphsPtqyIfQ=="],
@@ -43,7 +43,7 @@
 
     "@eslint/plugin-kit": ["@eslint/plugin-kit@0.7.3", "", { "dependencies": { "@eslint/core": "^1.2.1", "levn": "^0.4.1" } }, "sha512-IkO+/KEUvwbVpiURZg+P7zF74z5Jxe0UgJxVni+RtoHQ6IZieXaO02kmadomap/q+l6bc/jdPGGqTjhuZnuz1Q=="],
 
-    "@fq2ts/engine": ["@fq2ts/engine@github:ellisgl/fq2ts-engine#67bd0b7", {}, "ellisgl-fq2ts-engine-67bd0b7", "sha512-Zi+KcnDG822KY5KbXnlWhpp863FG8az03yHPIODjuxSFrfQiUJ6/wfBVFKoT6FS7dyh/mNdfuMHwvj4W4cB9pQ=="],
+    "@fq2ts/engine": ["@fq2ts/engine@github:ellisgl/fq2ts-engine#7e92a00", {}, "ellisgl-fq2ts-engine-7e92a00", "sha512-27c4F7K/TjWTERXTG5BiEGAfHbB2DWmjFuYpicp7p6+uuHxOtpZBZbMuqxd9EU3BSnnZ3F8osDhMHyu5NOIs1g=="],
 
     "@fq2ts/server": ["@fq2ts/server@github:ellisgl/fq2ts-server#6dfa1dc", { "dependencies": { "@fq2ts/engine": "github:ellisgl/fq2ts-engine#v0.2.0", "@types/nodemailer": "^8.0.2", "@types/ssh2": "^1.15.6", "nodemailer": "^8.0.11", "ssh2": "1.17.0" } }, "ellisgl-fq2ts-server-6dfa1dc", "sha512-LPxjX4a5KO0zlqBLVQyJMbuu4s228AGieAQG9Fi1bLfVh/GBVjL448LKwGmm0Fog211RWzjcZJkEpkS0HyH+Qw=="],
 

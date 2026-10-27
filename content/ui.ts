@@ -4,8 +4,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { escapeMarkup } from '@fq2ts/engine/text';
-import { pictureMarkup } from '@fq2ts/engine/xbin';
-import { flatten, layerBox, readIcy, tagMarkup, type Icy } from '@fq2ts/engine/icy';
+import { flatten, layerBox, pictureMarkup, readIcy, tagMarkup, type Icy } from '@fq2ts/engine/icy';
 import type { Config, Content } from '@fq2ts/engine/game';
 import type { Player } from '@fq2ts/engine/player';
 import type { ItemDef } from '@fq2ts/engine/items';

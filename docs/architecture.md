@@ -42,6 +42,7 @@ Roughly from the bottom up:
 | [screen.ts](https://github.com/ellisgl/fq2ts-engine/blob/main/src/screen.ts) | The 80x25 grid of cells, and turning it into terminal output. |
 | [terminal.ts](https://github.com/ellisgl/fq2ts-engine/blob/main/src/terminal.ts) | The keyboard and the real terminal: raw input becomes key names; the screen is sent out. |
 | [text.ts](https://github.com/ellisgl/fq2ts-engine/blob/main/src/text.ts) | The text markup (`{yellow}`, `{x 10}`, `{center}`...) drawn onto the screen. |
+| [icy.ts](https://github.com/ellisgl/fq2ts-engine/blob/main/src/icy.ts) | Pictures drawn in Icy Draw (`.icy`: layers, and tags for text), turned into markup. |
 | [ui.ts](https://github.com/ellisgl/fq2ts-engine/blob/main/src/ui.ts) | Building blocks: menus (`choose`), text boxes, the status bar, scrolling text. |
 | [world.ts](https://github.com/ellisgl/fq2ts-engine/blob/main/src/world.ts) | The map: screens on a grid, each 79x22 cells, read from JSON files. |
 | [player.ts](https://github.com/ellisgl/fq2ts-engine/blob/main/src/player.ts), [items.ts](https://github.com/ellisgl/fq2ts-engine/blob/main/src/items.ts) | The player's state (what's saved), and the item catalogue. |
@@ -134,6 +135,12 @@ A game gives the engine a `Content` object
 screen, help, status line, the start player, its opening, its inventory
 screen, and, most of all, `screens`: for each screen, the scripts that run
 when the player steps on a tile (`at`) and when it's drawn (`show`).
+
+Final Quest 2's title, help, credits and world map legend are pictures
+drawn in Icy Draw ([content/ui.ts](../content/ui.ts) reads `data/art/*.icy`):
+icy.ts draws their layers together into markup, and fills in their tags
+with text from `config.json`. The title's `Menu` layer gives the menu box
+(`title.menu.box`), where the server puts its login menus and questions.
 
 `Content<Flags, World>` takes two types: the game's flags (what each
 player remembers: `{ hadDrink: boolean; ... }`) and its world state (what

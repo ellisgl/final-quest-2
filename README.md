@@ -53,6 +53,14 @@ Players' games are saved in `server-data/fq2.sqlite` as they go (passwords are s
 
 Mods add screens, items, monsters and scripts to the game without changing it. Each is a folder in `mods/` with a `mod.ts` (TypeScript, using the same `g` API as the game's scripts) and any data files; the game and the server load them when they start (`--mods DIR` for another folder). [mods/_wishing-well/](mods/_wishing-well/) is an example (rename it without the `_` to switch it on), and [docs/mods.md](docs/mods.md) explains how to write one. Mods are code: only install ones you trust.
 
+## Drawing the screens
+
+The title, help, credits and the world map's legend are drawn in [Icy Draw](https://github.com/mkrueger/icy_tools/blob/master/crates/icy_draw/README.md) (0.6 or later) and kept in its own format in [data/art/](data/art/): open a `.icy` file there, change it, and save it. The game reads them as they are, so there's nothing to export.
+
+- **Layers** are drawn bottom first, as Icy Draw shows them; hidden ones aren't drawn. Some have jobs, by name: the title's `Menu` layer is the inside of the menu box (the menus and login questions go wherever it is), the credits' `Frame` layer is shown in a random colour (anything in it that isn't black), and `legend.icy` is a layer with an alpha channel, drawn over the world map, so its empty cells leave the map alone.
+- **Tags** are where text from `config.json` goes. A tag's replacement is the text, with `@TITLE@`, `@VERSION@`, `@REVISION@` and `@COMPANY@` filled in: `Welcome to @TITLE@ @VERSION@ by @COMPANY@.` is one tag. The game lines it up in the tag (left, centred or right) in the tag's colours, and cuts it if it's too long; the preview, what Icy Draw shows in its place, sets how long the tag is. [data/art/final-quest-2.toml](data/art/final-quest-2.toml) lists them: copy it to `~/.config/icy_draw/data/plugins/taglists/` to pick them in the tag dialog.
+- Use the 16 standard colours or xterm's 256, and characters one column wide (CP437, or any in a Unicode document). The game refuses a file with layer effects, a custom palette's colours or wide characters, naming what it can't draw; fonts, palettes and images are left out.
+
 ## Tools
 
 New versions of the original's map tools, working on `data/maps/` directly:
@@ -104,7 +112,7 @@ And in this one:
 
 - [fq2.ts](fq2.ts) is the single-player entry point, [server.ts](server.ts) the multiplayer one, and [tools/](tools/) runs the map tools on its maps.
 - [content/](content/) is the game itself: every screen's triggers and all the scripts, written as async TypeScript functions (converted from the original REF files). [content/start.ts](content/start.ts) holds the starting player and the `Flags` type, so a misspelled flag is a compile error.
-- [data/](data/) holds the game data as JSON: `config.json` (from VARS.DAT), `items.json` (the item catalogue), `monsters.json` (monsters and encounter tables, from NOSCR.DAT) and one file per screen in `data/maps/` (from MAPS.DAT, now with screen names and terrain).
+- [data/](data/) holds the game data as JSON: `config.json` (from VARS.DAT), `items.json` (the item catalogue), `monsters.json` (monsters and encounter tables, from NOSCR.DAT) and one file per screen in `data/maps/` (from MAPS.DAT, now with screen names and terrain). `data/art/` holds the screens drawn in Icy Draw (see Drawing the screens above).
 - Tests (`bun:test`) sit in each repository's `test/` folder. The packages test themselves on Test Quest ([fixture.ts](https://github.com/ellisgl/fq2ts-engine/blob/main/src/fixture.ts)), a tiny game of four screens and a few triggers, with its data in [fixture/](https://github.com/ellisgl/fq2ts-engine/tree/main/src/fixture), so they don't need Final Quest 2. FQ2's own tests are in [test/](test/): its scripts, data and maps, with its fixtures in [helpers.ts](test/helpers.ts). [content/data.test.ts](test/content/data.test.ts) runs every trigger in the game and checks that it sends the player somewhere real.
 - [mods/](mods/) holds the mods to add to the game, and [docs/mods.md](docs/mods.md) is the guide to writing them ([mods.ts](https://github.com/ellisgl/fq2ts-engine/blob/main/src/mods.ts) is the loader).
 - [docs/architecture.md](docs/architecture.md) is a tour of how it all works: the parts, the life of a keypress, the server, and where to start reading.
