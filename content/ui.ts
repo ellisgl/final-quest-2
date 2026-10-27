@@ -4,7 +4,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { escapeMarkup } from '@fq2ts/engine/text';
-import { pictureMarkup, readXBin } from '@fq2ts/engine/xbin';
+import { pictureMarkup, readXBin, type Picture } from '@fq2ts/engine/xbin';
 import { COLORS } from '@fq2ts/engine/screen';
 import { at } from '@fq2ts/engine/assert';
 import type { Config, Content } from '@fq2ts/engine/game';
@@ -12,12 +12,14 @@ import type { Player } from '@fq2ts/engine/player';
 import type { ItemDef } from '@fq2ts/engine/items';
 import type { Flags, G, Shared } from './start.ts';
 
-const art = (name: string): string[] => pictureMarkup(readXBin(readFileSync(join(import.meta.dir, '../data/art', name))));
-const titleArt = art('title.xb');
+// Screens drawn in an ANSI editor such as Icy Draw, saved as XBin.
+const picture = (name: string): Picture => readXBin(readFileSync(join(import.meta.dir, '../data/art', name)));
+const titleArt = pictureMarkup(picture('title.xb'));
+const helpArt = pictureMarkup(picture('help.xb'));
+const creditsArt = picture('credits.xb');
 
 export const title: Content<Flags, Shared>['title'] = {
-    // The art is drawn in an ANSI editor such as Icy Draw (data/art/title.xb);
-    // the version goes over it.
+    // The art is data/art/title.xb; the version goes over it.
     art: ({ version, revision }) => [...titleArt, `{y 13}{on gray}{white}{center}${version} ${revision}`],
     // [label, x, y]; colours are [foreground, background].
     menu: {
@@ -31,50 +33,26 @@ export const title: Content<Flags, Shared>['title'] = {
         ],
         selectedColor: [11, 1],
         color: [9, 1],
+        // The blue inside of the art's menu box.
+        box: { x: 31, y: 16, width: 20, height: 8 },
     },
 };
 
+// The help text is data/art/help.xb; the first line goes over it.
 export const help = ({ title, version, company }: Config): string[] => [
+    ...helpArt,
     `{y 1}{yellow}{center}Welcome to ${title} ${version} by ${company}.`,
-    '{y 3}{x 37}{yellow}KEYS:',
-    '{y 4}{x 31}{lightgreen}← = Moves you Left',
-    '{y 5}{x 31}{lightgreen}→ = Moves you Right',
-    '{y 6}{x 31}{lightgreen}↓ = Moves you Down',
-    '{y 7}{x 31}{lightgreen}↑ = Moves you Up',
-    '{y 8}{lightgreen}{center}I = Inventory -- M = Map',
-    '{y 9}{lightgreen}{center}ESC = Quit to Menu',
-    "{y 12}{x 3}{lightcyan}So, here we are.  Not much to report on this revision because I haven't done",
-    '{y 13}{lightcyan}much with it.  I am attempting to make as many screens as I can, and impliment',
-    "{y 14}{lightcyan}as much gameplay into them as possible.  You know, I'm not that creative of a",
-    "{y 15}{lightcyan}guy!  I don't know what I am going to do!  Anyway, today is 4/17/01, and this",
-    '{y 16}{lightcyan}is Rev 094B02, So I guess I will keep working on it.  The only reason that this',
-    "{y 17}{lightcyan}game never made 1.0 is because of that darned gameplay... Hey, I'll get it",
-    "{y 18}{lightcyan}eventually.  I've been working on it for two years and eight months now, so",
-    "{y 19}{lightcyan}three more years won't be any different.  {yellow}:{darkgray}-{lightgreen})",
-    '{y 21}{white}Good Luck Adventurer.',
-    '{y 23}{yellow}Press any key...',
 ];
 
-// `frame` is a colour number (1-7) for the shaded border.
+// The credits are data/art/credits.xb, with the shaded border drawn in blue:
+// it's shown in `frame` instead, a colour number (1-7). The lines naming the
+// game go over it.
 export function credits({ title, company, version, revision }: Config, frame: number): string[] {
     const c = at(COLORS, frame);
-    const box = (y: number, inner: string): string => `{y ${y}}{${c}}░░░░▒▒{darkgray}{on gray}${inner}{on black}{${c}}▒▒░░░░`;
-    const text = (y: number, s: string): string => box(y, `║{black}${s.padEnd(66)}{darkgray}║`);
+    const shade = (color: number): number => (color === 1 ? frame : color);
     return [
-        `{y 1}{${c}}░░░░▒▒▒▓▓▓▓{on ${c}}{sp 58}{on black}▓▓▓▓▒▒▒░░░░`,
-        box(2, `╔${'═'.repeat(66)}╗`),
-        text(3, ''),
-        box(4, `╟${'─'.repeat(28)}┤{yellow}Credits{darkgray}├${'─'.repeat(29)}╢`),
-        text(5, '        This game engine was originally brought to you by'),
-        text(6, '          Author....... at Akori Software, a division of'),
-        text(7, '                      Hollow-Head Software.'),
-        text(8, ''),
-        text(9, `    The game you just played used the ${title} (tm) engine`),
-        text(10, '                               to run.'),
-        text(11, ''),
-        text(12, ''),
-        box(13, `╚${'═'.repeat(66)}╝`),
-        `{y 14}{${c}}░░░░▒▒▒▓▓▓▓{on ${c}}{sp 58}{on black}▓▓▓▓▒▒▒░░░░`,
+        ...pictureMarkup({ ...creditsArt, cells: creditsArt.cells.map((cell) => ({ ...cell, fg: shade(cell.fg), bg: shade(cell.bg) })) }),
+        `{y 9}{x 8}{black}{on gray}${`    The game you just played used the ${title} (tm) engine`.padEnd(66)}`,
         `{y 3}{black}{on gray}{center}Thank you for playing ${title}`,
         `{y 12}{black}{on gray}{center}This gameplay brought to you by ${company}...`,
         `{y 14}{white}{on ${c}}{center}${version} ${revision}`,
