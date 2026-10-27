@@ -34,7 +34,7 @@ export const title: Content<Flags, Shared>['title'] = {
         selectedColor: [11, 1],
         color: [9, 1],
         // The blue inside of the art's menu box.
-        box: { x: 31, y: 16, width: 20, height: 8 },
+        box: { x: 29, y: 16, width: 28, height: 8 },
     },
 };
 
