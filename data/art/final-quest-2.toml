@@ -1,0 +1,31 @@
+name = "Final Quest 2"
+description = "Text from config.json that the game puts in a screen's tags"
+comments = """A tag's replacement can be one of these or a line with them in it, like
+"Welcome to @TITLE@ @VERSION@ by @COMPANY@." The game fills them in and
+lines the text up in the tag (left, centred or right). The preview sets
+how long the tag is.
+
+Copy this file to ~/.config/icy_draw/data/plugins/taglists/ to pick these
+in Icy Draw's tag dialog.
+"""
+version = "1.0.0"
+
+[[entries]]
+tag = "@TITLE@"
+example = "Final Quest 2"
+description = "The game's title (config.json: title)."
+
+[[entries]]
+tag = "@VERSION@"
+example = "V0.94"
+description = "The game's version (config.json: version)."
+
+[[entries]]
+tag = "@REVISION@"
+example = "Rev D"
+description = "The game's revision (config.json: revision)."
+
+[[entries]]
+tag = "@COMPANY@"
+example = "Akori Software"
+description = "Who made the game (config.json: company)."

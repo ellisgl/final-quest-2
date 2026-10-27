@@ -4,23 +4,35 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { escapeMarkup } from '@fq2ts/engine/text';
-import { pictureMarkup, readXBin, type Picture } from '@fq2ts/engine/xbin';
-import { COLORS } from '@fq2ts/engine/screen';
-import { at } from '@fq2ts/engine/assert';
+import { pictureMarkup } from '@fq2ts/engine/xbin';
+import { flatten, layerBox, readIcy, tagMarkup, type Icy } from '@fq2ts/engine/icy';
 import type { Config, Content } from '@fq2ts/engine/game';
 import type { Player } from '@fq2ts/engine/player';
 import type { ItemDef } from '@fq2ts/engine/items';
 import type { Flags, G, Shared } from './start.ts';
 
-// Screens drawn in an ANSI editor such as Icy Draw, saved as XBin.
-const picture = (name: string): Picture => readXBin(readFileSync(join(import.meta.dir, '../data/art', name)));
-const titleArt = pictureMarkup(picture('title.xb'));
-const helpArt = pictureMarkup(picture('help.xb'));
-const creditsArt = picture('credits.xb');
+// Screens drawn in Icy Draw (data/art/*.icy). Their tags say where text
+// from config.json goes: each @TITLE@, @VERSION@, @REVISION@ and @COMPANY@
+// in a tag's replacement is filled in (data/art/final-quest-2.toml lists
+// them for Icy Draw).
+const art = (name: string): Icy => readIcy(readFileSync(join(import.meta.dir, '../data/art', name)));
+const titleArt = art('title.icy');
+const helpArt = art('help.icy');
+const creditsArt = art('credits.icy');
+
+const draw = (icy: Icy, { title, version, revision, company }: Config): string[] => [
+    ...pictureMarkup(flatten(icy)),
+    ...tagMarkup(icy, { TITLE: title, VERSION: version, REVISION: revision, COMPANY: company }),
+];
+
+// The title's Menu layer is the inside of the menu box.
+const menuBox = layerBox(titleArt, 'Menu');
+if (!menuBox) {
+    throw new Error('data/art/title.icy has no Menu layer for the menu box');
+}
 
 export const title: Content<Flags, Shared>['title'] = {
-    // The art is data/art/title.xb; the version goes over it.
-    art: ({ version, revision }) => [...titleArt, `{y 13}{on gray}{white}{center}${version} ${revision}`],
+    art: (config) => draw(titleArt, config),
     // [label, x, y]; colours are [foreground, background].
     menu: {
         options: [
@@ -33,38 +45,25 @@ export const title: Content<Flags, Shared>['title'] = {
         ],
         selectedColor: [11, 1],
         color: [9, 1],
-        // The blue inside of the art's menu box.
-        box: { x: 29, y: 16, width: 28, height: 8 },
+        box: menuBox,
     },
 };
 
-// The help text is data/art/help.xb; the first line goes over it.
-export const help = ({ title, version, company }: Config): string[] => [
-    ...helpArt,
-    `{y 1}{yellow}{center}Welcome to ${title} ${version} by ${company}.`,
-];
+export const help = (config: Config): string[] => draw(helpArt, config);
 
-// The credits are data/art/credits.xb, with the shaded border drawn in blue:
-// it's shown in `frame` instead, a colour number (1-7). The lines naming the
-// game go over it.
-export function credits({ title, company, version, revision }: Config, frame: number): string[] {
-    const c = at(COLORS, frame);
-    const shade = (color: number): number => (color === 1 ? frame : color);
-    return [
-        ...pictureMarkup({ ...creditsArt, cells: creditsArt.cells.map((cell) => ({ ...cell, fg: shade(cell.fg), bg: shade(cell.bg) })) }),
-        `{y 9}{x 8}{black}{on gray}${`    The game you just played used the ${title} (tm) engine`.padEnd(66)}`,
-        `{y 3}{black}{on gray}{center}Thank you for playing ${title}`,
-        `{y 12}{black}{on gray}{center}This gameplay brought to you by ${company}...`,
-        `{y 14}{white}{on ${c}}{center}${version} ${revision}`,
-    ];
+// The credits' Frame layer is shown in `frame`, a colour number (1-7), in
+// place of any colour but black.
+export function credits(config: Config, frame: number): string[] {
+    const shade = (color: number | null): number | null => (color === null || color === 0 ? color : frame);
+    const layers = creditsArt.layers.map((l) =>
+        l.title === 'Frame' ? { ...l, cells: l.cells.map((c) => c && { ...c, fg: shade(c.fg), bg: shade(c.bg) }) } : l,
+    );
+    return draw({ ...creditsArt, layers }, config);
 }
 
-export const worldMapLegend: readonly string[] = [
-    '{x 30}{y 3}{white}{on blue}Welcome to {yellow}F{red}inal {yellow}Q{red}uest {yellow}2{white}.',
-    '{x 28}{y 5}{white}{on blue}A {on gray} {on blue} represents a large town,',
-    '{x 28}{y 6}{white}{on blue}a {gray}{on green}■{on blue}{white} represents a small town,',
-    '{x 28}{y 7}{white}{on blue}and a {on green} {on blue} represents land.',
-];
+// Drawn over the world map: data/art/legend.icy, a layer with nothing but
+// the legend in it.
+export const worldMapLegend: readonly string[] = pictureMarkup(flatten(art('legend.icy')));
 
 // The game's title, then the player's name (or, for old saves without
 // one, the company), hitpoints and gold.
