@@ -203,6 +203,18 @@ Each phase ends playable, tested and committed.
   there are too many), as in LORD II. LORD II's B (the messages you
   missed) was there already: the engine's back-buffer keeps the last
   100, from other players too.
+- **Players who leave stay in the world** (as in LORD II): where they
+  were, sleeping (a dimmer ☻; S says "(sleeping)"), for 7 days after
+  their last visit (`--away-days`). H finds them too, even on safe
+  screens: the fight is against their save, which is changed and saved
+  (it doesn't count as them playing), and they're sent a letter from
+  whoever it was saying how it went. A player on 1 hitpoint can't be
+  fought, so a beaten player isn't beaten again. Inns (screens marked
+  `"inn": true` in their map files; in FQ2, the Red Dragon Inn's two
+  screens) are the only safe place to leave: Z there takes a room
+  (`--inn-cost`, $20), saves and closes the connection, and the player
+  is off the map until they're back. Each save keeps where it is and
+  whether its player is asleep at an inn (database step 11).
 
 ## Testing
 
@@ -219,8 +231,10 @@ Each phase ends playable, tested and committed.
    castle, and the world keeps the list of who has. The barn gold and the
    minigun stay each player's.
 3. ~~**PvP rules.**~~ Decided: the loser gives half their gold to the
-   winner and is left on 1 hitpoint; only players online, next to you, can
-   be attacked (as LORD II).
+   winner and is left on 1 hitpoint; only players next to you can be
+   attacked. Players who've left stay where they were, sleeping, and can
+   be attacked there unless they took a room at an inn (as LORD II, where
+   only inns were safe for players who'd left).
 4. ~~**Telnet sends passwords in the clear.**~~ Decided: the web client
    over TLS only. (SSH was there too for a while, and has been taken out.)
    Before that: SSH (any user
