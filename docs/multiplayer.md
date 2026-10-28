@@ -40,6 +40,8 @@ change with no `await` between them can't be interrupted.
 |---|---|
 | (map) | Other players drawn live on your screen; notices when they arrive and leave |
 | P / L | Who's online / every player, ranked |
+| S | The names of the players on your screen |
+| B | The last messages: what was said, who came and went |
 | T / Y | Talk to your screen / yell to everyone |
 | W | Write mail; new mail is announced when you log in |
 | D | The daily news: deaths, PvP results, big purchases... |
@@ -197,6 +199,10 @@ Each phase ends playable, tested and committed.
   goes on with a *; numbers standing for letters ("sh1t") count. On by
   default; `--bad-words FILE` gives a server's own list, `--no-clean`
   turns it off.
+- **S** names the others on your screen (in the status bar, or a list if
+  there are too many), as in LORD II. LORD II's B (the messages you
+  missed) was there already: the engine's back-buffer keeps the last
+  100, from other players too.
 
 ## Testing
 

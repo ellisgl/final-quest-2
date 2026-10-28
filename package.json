@@ -7,7 +7,7 @@
   "license": "MIT",
   "dependencies": {
     "@fq2ts/engine": "github:ellisgl/fq2ts-engine#82c7eb9f847671c0dcdab964ad02af26489d25a1",
-    "@fq2ts/server": "github:ellisgl/fq2ts-server#v0.5.0",
+    "@fq2ts/server": "github:ellisgl/fq2ts-server#v0.6.0",
     "@fq2ts/tools": "github:ellisgl/fq2ts-tools#v0.3.0"
   },
   "overrides": {
