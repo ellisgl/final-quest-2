@@ -6,7 +6,7 @@
       "name": "final-quest-2",
       "dependencies": {
         "@fq2ts/engine": "github:ellisgl/fq2ts-engine#0d69e95e12d0582bee20dbd10b915cf5d89cb782",
-        "@fq2ts/server": "github:ellisgl/fq2ts-server#v0.7.0",
+        "@fq2ts/server": "github:ellisgl/fq2ts-server#v0.7.1",
         "@fq2ts/tools": "github:ellisgl/fq2ts-tools#v0.3.0",
       },
       "devDependencies": {
@@ -42,7 +42,7 @@
 
     "@fq2ts/engine": ["@fq2ts/engine@github:ellisgl/fq2ts-engine#0d69e95", {}, "ellisgl-fq2ts-engine-0d69e95", "sha512-vFiQbcprQrMhOzBIIjQFyXzMEgfoOinn0n0iPF9FZCTnUm09vVkffNQ1ClGZYywyjRXIlz/0pT41eCvJhvMsFQ=="],
 
-    "@fq2ts/server": ["@fq2ts/server@github:ellisgl/fq2ts-server#f1993c8", { "dependencies": { "@fq2ts/engine": "github:ellisgl/fq2ts-engine#v0.6.0", "@types/nodemailer": "^8.0.2", "@wterm/dom": "0.5.7", "nodemailer": "^10.2.1" } }, "ellisgl-fq2ts-server-f1993c8", "sha512-nEATbKhkB85qpOK1H8OxfyhEWDenvVe0gH6bScMsiZxFGL9gn2djIeenmcu1++wZAawOfqZIYP3rv3vE+9To+Q=="],
+    "@fq2ts/server": ["@fq2ts/server@github:ellisgl/fq2ts-server#fbac9aa", { "dependencies": { "@fq2ts/engine": "github:ellisgl/fq2ts-engine#v0.6.0", "@types/nodemailer": "^8.0.2", "@wterm/dom": "0.5.7", "nodemailer": "^10.2.1" } }, "ellisgl-fq2ts-server-fbac9aa", "sha512-C0U95a3Wn6CvJ3DQTrAw/yuYidSm3bOiQYwCzyIt84jzfOsY+Sz/sSSUu3WlRWiUZzRcVHZ8q0M+I/JnTIFPsA=="],
 
     "@fq2ts/tools": ["@fq2ts/tools@github:ellisgl/fq2ts-tools#816a5da", { "dependencies": { "@fq2ts/engine": "github:ellisgl/fq2ts-engine#v0.5.0" } }, "ellisgl-fq2ts-tools-816a5da", "sha512-YTumxXTVlOUBMAbDacn2BVqsbMOx6odFJ57nTV7qpd4o/h/eM0fpc9LQkEEjRiYPRyinmaTF55HI1MeDWj50Wg=="],
 
@@ -231,6 +231,8 @@
     "yocto-queue": ["yocto-queue@0.1.0", "", {}, "sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q=="],
 
     "@eslint-community/eslint-utils/eslint-visitor-keys": ["eslint-visitor-keys@3.4.3", "", {}, "sha512-wpc+LXeiyiisxPlEkUzU6svyS1frIO3Mgxj1fdy7Pm8Ygzguax2N3Fa/D/ag1WqbOprdI+uY6wMUl8/a2G+iag=="],
+
+    "@fq2ts/server/@fq2ts/engine": ["@fq2ts/engine@github:ellisgl/fq2ts-engine#0d69e95", {}, "ellisgl-fq2ts-engine-0d69e95", "sha512-vFiQbcprQrMhOzBIIjQFyXzMEgfoOinn0n0iPF9FZCTnUm09vVkffNQ1ClGZYywyjRXIlz/0pT41eCvJhvMsFQ=="],
 
     "@types/node/undici-types": ["undici-types@8.9.0", "", {}, "sha512-KTDyRTYX8sWmKXAikPHHSyc63CRPETMctyjKFupcC6OBLXT3xsN0e9aF7m+mIXutFWpUXuedtowG7iLOzp0kQg=="],
 

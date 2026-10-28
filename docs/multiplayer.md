@@ -215,6 +215,10 @@ Each phase ends playable, tested and committed.
   (`--inn-cost`, $20), saves and closes the connection, and the player
   is off the map until they're back. Each save keeps where it is and
   whether its player is asleep at an inn (database step 11).
+  Leaving the realm from the Escape menu anywhere else warns the player
+  first ("You'll sleep here, where anyone can attack you..."), with
+  "Return to the game" picked (and Escape for it) and "Leave anyway"
+  below. (Closing the browser leaves without a warning.)
 
 ## Testing
 
