@@ -12,7 +12,7 @@ separate entry point (`bun run server`).
 
 ```
                        +------------- server.ts (one Bun process) -------------+
- browser (xterm.js) WS>| WebConnection    -> Terminal -> Session (Game) --+     |
+ browser (wterm)  WS>| WebConnection    -> Terminal -> Session (Game) --+     |
                        |                                                 v     |
                        |        Realm: who's online, where, chat, news,        |
                        |        shared flags, PvP ---- SQLite (bun:sqlite)      |
@@ -21,8 +21,8 @@ separate entry point (`bun run server`).
 
 - **Connections** turn a socket into the `TerminalInput` / `TerminalOutput`
   pair `Terminal` already accepts.
-  - The web client is a static page with xterm.js, sending keys and resizes
-    over a WebSocket (the editor's mouse support works there too).
+  - The web client is a static page with wterm (xterm.js at first),
+    sending keys and resizes over a WebSocket (the editor's mouse support works there too).
 - **Session**: today's `Game`, one per connection, with the player's state
   loaded from and saved to the database instead of save slots.
 - **Realm**: the shared state of everyone online. It tracks who's on which

@@ -193,7 +193,7 @@ one process:
 
 - **A connection** ([server.ts](https://github.com/ellisgl/fq2ts-server/blob/main/src/server.ts)) is one
   player's web socket, from the page ([client.html](https://github.com/ellisgl/fq2ts-server/blob/main/src/client.html),
-  using xterm.js). Each gets a `RemoteIO`, which pretends to be a keyboard
+  using wterm, which the server builds and serves itself). Each gets a `RemoteIO`, which pretends to be a keyboard
   and a terminal, and a `Terminal` on top, so the game runs exactly as it
   does on your own screen.
 - **The guard** ([guard.ts](https://github.com/ellisgl/fq2ts-server/blob/main/src/guard.ts)) checks each
