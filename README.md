@@ -31,11 +31,11 @@ Items are defined in `data/items.json` and monsters and encounter tables in `dat
 ## Multiplayer server
 
 ```sh
-bun run server                     # SSH on 2222, web on http://127.0.0.1:8080/
+bun run server                     # web on http://127.0.0.1:8080/
 bun run server --host 0.0.0.0      # let other computers connect (-h for all the options)
 ```
 
-Players connect with SSH (`ssh -p 2222 localhost`, with any user name and no password) or a web browser, make an account, and play. Every account has an email address, confirmed with a code sent to it, and one address can only have one account. A forgotten password is reset from the login menu with another code, and the address can be changed from the menu in the game (Escape), which takes the password and a code sent to the new address. The codes are sent through an SMTP server:
+Players connect with a web browser, make an account, and play. Every account has an email address, confirmed with a code sent to it, and one address can only have one account. A forgotten password is reset from the login menu with another code, and the address can be changed from the menu in the game (Escape), which takes the password and a code sent to the new address. The codes are sent through an SMTP server:
 
 ```sh
 FQ2_SMTP_PASSWORD=... bun run server --smtp-host smtp.example.com --smtp-user game@example.com
@@ -45,9 +45,9 @@ Without `--smtp-host`, emails are written to the server's log instead, for tryin
 
 Every option can also be set as an environment variable (`--smtp-host` is `FQ2_SMTP_HOST`, and so on), or kept in a `.env` file in the folder the server is started from: copy [.env.example](.env.example) to `.env` and fill it in. Options on the command line win. `.env` is ignored by git, so the SMTP password stays out of the repository.
 
-Players' games are saved in `server-data/fq2.sqlite` as they go (passwords are stored as argon2id hashes). The server listens only on this computer unless given `--host`. There's no telnet, as it would send passwords unencrypted. SSH is encrypted; the web page is plain HTTP, so over the internet put it behind HTTPS (see [docs/deploying.md](docs/deploying.md)). The server makes its SSH host key the first time, in `server-data/ssh_host_ed25519_key`; keep it, or players' SSH clients will warn that the server has changed.
+Players' games are saved in `server-data/fq2.sqlite` as they go (passwords are stored as argon2id hashes). The server listens only on this computer unless given `--host`. The web page is plain HTTP, so over the internet put it behind HTTPS (see [docs/deploying.md](docs/deploying.md)).
 
-(ssh2 is patched, in [patches/](patches/), not to load its optional native add-ons: Bun crashes loading them. It works without them.) Players see each other on the map (☻) and hear when someone enters or leaves the realm. On the server, T says something to the players on your screen, Y yells to everyone, W reads and writes letters, D shows the daily news, H fights a player next to you (not on safe screens, three times a day), G gives a player next to you gold or an item (A accepts what you're offered), K is the bounty board in town (gold on a player's head, for whoever beats them), P lists who's in the realm and L ranks every player; ? lists them all. Everyone shares the Wyrm in the mountains west of Stone Valley, wearing it down together, one fight a day each, and the realm's deeds go on the hall of heroes' plaque in Stone Valley. F, anywhere, shows the hall, who owns the castle and how the Wyrm is. A new day dawns at midnight. Admins (`bun run admin admin NAME`) press ! in the game to kick, ban and unban players; [docs/deploying.md](docs/deploying.md) covers running a server for real: systemd, HTTPS, backups and upgrades. The cheat words are off on the server. See [docs/multiplayer.md](docs/multiplayer.md) for what's next.
+Players see each other on the map (☻) and hear when someone enters or leaves the realm. On the server, T says something to the players on your screen, Y yells to everyone, W reads and writes letters, D shows the daily news, H fights a player next to you (not on safe screens, three times a day), G gives a player next to you gold or an item (A accepts what you're offered), K is the bounty board in town (gold on a player's head, for whoever beats them), P lists who's in the realm and L ranks every player; ? lists them all. Everyone shares the Wyrm in the mountains west of Stone Valley, wearing it down together, one fight a day each, and the realm's deeds go on the hall of heroes' plaque in Stone Valley. F, anywhere, shows the hall, who owns the castle and how the Wyrm is. A new day dawns at midnight. Admins (`bun run admin admin NAME`) press ! in the game to kick, ban and unban players; [docs/deploying.md](docs/deploying.md) covers running a server for real: systemd, HTTPS, backups and upgrades. The cheat words are off on the server. See [docs/multiplayer.md](docs/multiplayer.md) for what's next.
 
 ## Mods
 
@@ -109,7 +109,7 @@ Code style follows the PER Coding Style (adapted from PHP): 4-space indents, sin
 This repository is Final Quest 2, a game built on packages that other games can use, each in its own repository and installed from GitHub (`package.json` pins each to a tag):
 
 - [fq2ts-engine](https://github.com/ellisgl/fq2ts-engine) (`@fq2ts/engine`) is the game engine: terminal, screen, text markup, world, combat, items, saves, and the `g` API that scripts use ([script.ts](https://github.com/ellisgl/fq2ts-engine/blob/main/src/script.ts)). [testing.ts](https://github.com/ellisgl/fq2ts-engine/blob/main/src/testing.ts) is a kit for testing games: a `FakeTerminal` that plays back scripted key presses, so whole games can be driven from a test, and small maps, worlds and monsters.
-- [fq2ts-server](https://github.com/ellisgl/fq2ts-server) (`@fq2ts/server`) is the multiplayer server: SSH and web connections, accounts with email addresses, saves (SQLite, with [migrations](https://github.com/ellisgl/fq2ts-server/blob/main/src/migrations.ts)), and each player's session. [cli.ts](https://github.com/ellisgl/fq2ts-server/blob/main/src/cli.ts) is its command line, which a game runs with its content.
+- [fq2ts-server](https://github.com/ellisgl/fq2ts-server) (`@fq2ts/server`) is the multiplayer server: web connections, accounts with email addresses, saves (SQLite, with [migrations](https://github.com/ellisgl/fq2ts-server/blob/main/src/migrations.ts)), and each player's session. [cli.ts](https://github.com/ellisgl/fq2ts-server/blob/main/src/cli.ts) is its command line, which a game runs with its content.
 - [fq2ts-tools](https://github.com/ellisgl/fq2ts-tools) (`@fq2ts/tools`) holds the map tools (see Tools above); a game gives them its map folder and trigger tiles.
 - [hello-quest](https://github.com/ellisgl/hello-quest) is Hello Quest, the smallest whole game on the engine: three screens, a sign, a hermit and some monsters. [docs/making-a-game.md](https://github.com/ellisgl/hello-quest/blob/main/docs/making-a-game.md) builds it step by step, as a guide to making your own.
 And in this one:
@@ -120,8 +120,7 @@ And in this one:
 - Tests (`bun:test`) sit in each repository's `test/` folder. The packages test themselves on Test Quest ([fixture.ts](https://github.com/ellisgl/fq2ts-engine/blob/main/src/fixture.ts)), a tiny game of four screens and a few triggers, with its data in [fixture/](https://github.com/ellisgl/fq2ts-engine/tree/main/src/fixture), so they don't need Final Quest 2. FQ2's own tests are in [test/](test/): its scripts, data and maps, with its fixtures in [helpers.ts](test/helpers.ts). [content/data.test.ts](test/content/data.test.ts) runs every trigger in the game and checks that it sends the player somewhere real.
 - [mods/](mods/) holds the mods to add to the game, and [docs/mods.md](docs/mods.md) is the guide to writing them ([mods.ts](https://github.com/ellisgl/fq2ts-engine/blob/main/src/mods.ts) is the loader).
 - [docs/architecture.md](docs/architecture.md) is a tour of how it all works: the parts, the life of a keypress, the server, and where to start reading.
-- [docs/multiplayer.md](docs/multiplayer.md) is the plan for live multiplayer (SSH and web, LORD II style).
-- [patches/](patches/) patches ssh2 (here and in fq2ts-server: Bun only applies the top project's patches) not to load its native add-ons (Bun crashes loading them).
+- [docs/multiplayer.md](docs/multiplayer.md) is the plan for live multiplayer (in the browser, LORD II style).
 
 ## License
 

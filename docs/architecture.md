@@ -14,7 +14,7 @@ to write a mod, [mods.md](mods.md).)
    server.ts  tools/                  tools/
         │                                  │
         ▼                                  ▼
- fq2ts-engine ◄──── fq2ts-server  (multiplayer: SSH, web)
+ fq2ts-engine ◄──── fq2ts-server  (multiplayer, in the browser)
    the game itself ◄── fq2ts-tools  (map viewer, editor, generator)
 ```
 
@@ -186,14 +186,13 @@ just more content.
 one process:
 
 ```
- SSH ────┐                           ┌─► Game (Ann)   ─┐
-         ├─► Connection ─► Terminal ─┼─► Game (Bob)   ─┼─► Realm: who's where
- web ────┘   (RemoteIO)    Session   └─► Game (Cat)   ─┘   Store: SQLite
+                                     ┌─► Game (Ann)   ─┐
+ web ──────► Connection ─► Terminal ─┼─► Game (Bob)   ─┼─► Realm: who's where
+             (RemoteIO)    Session   └─► Game (Cat)   ─┘   Store: SQLite
 ```
 
 - **A connection** ([server.ts](https://github.com/ellisgl/fq2ts-server/blob/main/src/server.ts)) is one
-  player's socket: SSH ([ssh.ts](https://github.com/ellisgl/fq2ts-server/blob/main/src/ssh.ts)) or a web
-  socket from the page ([client.html](https://github.com/ellisgl/fq2ts-server/blob/main/src/client.html),
+  player's web socket, from the page ([client.html](https://github.com/ellisgl/fq2ts-server/blob/main/src/client.html),
   using xterm.js). Each gets a `RemoteIO`, which pretends to be a keyboard
   and a terminal, and a `Terminal` on top, so the game runs exactly as it
   does on your own screen.
@@ -264,7 +263,7 @@ level up:
   Quest ([fixture.ts](https://github.com/ellisgl/fq2ts-engine/blob/main/src/fixture.ts)); FQ2's tests play
   Final Quest 2.
 - **The real server**: the server tests start a server and connect to it
-  over SSH and web sockets, as players would. A model of each
+  over web sockets, as players would. A model of each
   client's screen ([screen-model.ts](https://github.com/ellisgl/fq2ts-server/blob/main/test/screen-model.ts))
   follows what the server sends, so a test can wait until "Bob says: hello"
   is on Ann's screen.

@@ -6,9 +6,8 @@ systemd, with the web page behind HTTPS, admins, backups and upgrades.
 ## What it needs
 
 - Linux with [Bun](https://bun.sh) 1.3 or later.
-- Open ports for the ways players connect: SSH (2222), and HTTPS (443) for
-  the web page, through a proxy (below). (There's no telnet: it would send
-  passwords in the clear.)
+- Open ports for HTTPS (443, and 80 for the certificate): players connect
+  with a web browser, through a proxy (below).
 - An SMTP account to send players' codes (confirming email addresses,
   resetting passwords). Without one, codes are only written to the log.
 
@@ -23,8 +22,7 @@ cd ~/final-quest-2
 bun install
 ```
 
-`bun install` applies the patch in `patches/` (ssh2's native add-ons crash
-Bun) and builds nothing (`trustedDependencies` is empty).
+`bun install` builds nothing (`trustedDependencies` is empty).
 
 ## Configure
 
@@ -39,8 +37,7 @@ chmod 600 .env          # it holds the SMTP password
 For a public server, the important ones:
 
 ```sh
-FQ2_HOST=0.0.0.0           # SSH listens to everyone...
-FQ2_WEB_HOST=127.0.0.1     # ...the web page only to the proxy, on this machine
+FQ2_HOST=127.0.0.1         # the web page listens only to the proxy, on this machine
 FQ2_TRUST_PROXY=true       # web players' real addresses, from the proxy
 FQ2_SMTP_HOST=smtp.example.com
 FQ2_SMTP_USER=game@example.com
@@ -48,7 +45,6 @@ FQ2_SMTP_PASSWORD=...
 FQ2_MAIL_FROM=Final Quest 2 <game@example.com>
 ```
 
-Turn off what you don't want (`FQ2_NO_SSH=true`, `FQ2_NO_WEB=true`).
 `bun run server -h` lists every setting.
 
 The game rules can be changed the same way: how many fights between
@@ -56,9 +52,7 @@ players a day (`FQ2_FIGHTS_PER_DAY`), what the winner takes, how often
 players can talk, how many letters they can send and keep, and how long
 the news lasts. `.env.example` lists them with their defaults.
 
-The database and the SSH host key go in `server-data/` (`FQ2_DATA`). Keep
-`ssh_host_ed25519_key`: if it's lost, a new one is made, and players' SSH
-clients will warn that the server has changed.
+The database goes in `server-data/` (`FQ2_DATA`).
 
 ## Start it with systemd
 
@@ -87,10 +81,6 @@ sudo systemctl daemon-reload
 sudo systemctl enable --now fq2
 journalctl -u fq2 -f       # the log: who comes and goes, kicks and bans, errors
 ```
-
-To use SSH's usual port (22, if the machine's own SSH is elsewhere), let
-the service bind it with `AmbientCapabilities=CAP_NET_BIND_SERVICE` under
-`[Service]`, and set `FQ2_SSH_PORT=22`.
 
 ## The web page, over HTTPS
 
@@ -132,11 +122,10 @@ above), for bans and the limits below. Only set it with a proxy in front:
 otherwise anyone can claim any address. (Bans on this machine's own
 address are refused, as they'd shut out everyone behind the proxy.)
 
-Open the firewall for the proxy and the game, not the web port itself:
+Open the firewall for the proxy, not the web port itself:
 
 ```sh
 sudo ufw allow 80,443/tcp
-sudo ufw allow 2222/tcp     # SSH
 ```
 
 ## Admins
@@ -198,8 +187,7 @@ server runs with SQLite's `VACUUM INTO`, which makes a consistent copy:
 bun -e "new (require('bun:sqlite').Database)('server-data/fq2.sqlite').run(\"VACUUM INTO '/backups/fq2-$(date +%F).sqlite'\")"
 ```
 
-(A daily cron job of that, and a copy of `.env` and the SSH host key, is
-everything.) To restore, stop the server, delete `server-data/fq2.sqlite`
+(A daily cron job of that, and a copy of `.env`, is everything.) To restore, stop the server, delete `server-data/fq2.sqlite`
 and any `fq2.sqlite-wal` and `fq2.sqlite-shm` beside it, and put the copy
 back as `server-data/fq2.sqlite`.
 

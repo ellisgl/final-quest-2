@@ -7,7 +7,7 @@
   "license": "MIT",
   "dependencies": {
     "@fq2ts/engine": "github:ellisgl/fq2ts-engine#82c7eb9f847671c0dcdab964ad02af26489d25a1",
-    "@fq2ts/server": "github:ellisgl/fq2ts-server#v0.2.0",
+    "@fq2ts/server": "github:ellisgl/fq2ts-server#v0.3.0",
     "@fq2ts/tools": "github:ellisgl/fq2ts-tools#v0.3.0"
   },
   "overrides": {
@@ -33,8 +33,5 @@
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.72.0"
   },
-  "trustedDependencies": [],
-  "patchedDependencies": {
-    "ssh2@1.17.0": "patches/ssh2@1.17.0.patch"
-  }
+  "trustedDependencies": []
 }

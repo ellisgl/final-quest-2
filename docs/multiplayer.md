@@ -2,7 +2,7 @@
 
 Final Quest 2 was inspired by Legend of the Red Dragon II, a multiplayer BBS
 door game. This is the plan for live multiplayer in the TypeScript version:
-players connect to one server by SSH or a web browser, see each other move
+players connect to one server with a web browser, see each other move
 around the map, talk, and fight.
 
 Single-player stays as it is (`bun start`, with save slots). Multiplayer is a
@@ -12,7 +12,6 @@ separate entry point (`bun run server`).
 
 ```
                        +------------- server.ts (one Bun process) -------------+
- SSH client ----TCP-->| SshConnection    -> Terminal -> Session (Game) --+     |
  browser (xterm.js) WS>| WebConnection    -> Terminal -> Session (Game) --+     |
                        |                                                 v     |
                        |        Realm: who's online, where, chat, news,        |
@@ -22,7 +21,6 @@ separate entry point (`bun run server`).
 
 - **Connections** turn a socket into the `TerminalInput` / `TerminalOutput`
   pair `Terminal` already accepts.
-  - SSH (ssh2) gives a shell with the window size for the 80x25 check.
   - The web client is a static page with xterm.js, sending keys and resizes
     over a WebSocket (the editor's mouse support works there too).
 - **Session**: today's `Game`, one per connection, with the player's state
@@ -103,8 +101,8 @@ Each phase ends playable, tested and committed.
   - SSH (ssh2) on port 2222: any user name, no password, then the same
     login screen. Only a shell: no commands, forwarding or file transfer.
     The host key (ed25519) is made on first start. A client gets 30
-    seconds to ask for a terminal. ssh2 is patched not to load its native
-    add-ons, which crash Bun.
+    seconds to ask for a terminal. (SSH has since been taken out: the
+    server is played only in the browser.)
 
 - **Phase 2: done.** Other players are drawn on the map (☻; you're ☺),
   arrivals in and departures from the realm are announced, and P lists
@@ -167,8 +165,9 @@ Each phase ends playable, tested and committed.
     everyone something. `bun run admin` lists accounts, bans and unbans
     from the command line. A banned player is told why at the door.
     Kicks and bans are logged. (Database step 7.)
-  - `--web-host` (`FQ2_WEB_HOST`) lets the web page listen only to the
-    proxy while SSH listens to everyone.
+  - `--web-host` (`FQ2_WEB_HOST`) let the web page listen only to the
+    proxy while SSH listened to everyone. (Gone with SSH: `--host` is
+    where the web page listens.)
   - The config file is `.env`; the log is the server's output (the
     journal, under systemd).
 
@@ -196,7 +195,7 @@ Each phase ends playable, tested and committed.
 
 - Realm logic: several `FakeTerminal` sessions in one test.
 - One integration test that starts the server on a random port and
-  connects with an SSH client and a WebSocket.
+  connects with WebSockets.
 
 ## Open questions
 
@@ -209,7 +208,9 @@ Each phase ends playable, tested and committed.
 3. ~~**PvP rules.**~~ Decided: the loser gives half their gold to the
    winner and is left on 1 hitpoint; only players online, next to you, can
    be attacked (as LORD II).
-4. ~~**Telnet sends passwords in the clear.**~~ Decided: SSH (any user
+4. ~~**Telnet sends passwords in the clear.**~~ Decided: the web client
+   over TLS only. (SSH was there too for a while, and has been taken out.)
+   Before that: SSH (any user
    name, no password, then the game's login screen) for secure terminal
    play, and the web client over TLS. Telnet was there at first (for LANs
    and BBSes), and has since been taken out: it sent passwords in the
