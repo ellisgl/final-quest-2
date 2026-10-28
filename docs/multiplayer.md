@@ -191,6 +191,13 @@ Each phase ends playable, tested and committed.
   stronger three days later), and the hall of heroes keeps the realm's
   lasting deeds (the Wyrm's slayers, the first to buy the castle).
 
+- **Clean mode** (LORD II's swear patrol): swear words are starred out
+  of what players say, yell and write, and new players can't be called
+  one ([fq2ts-server's clean.ts](https://github.com/ellisgl/fq2ts-server/blob/main/src/clean.ts)). Whole words, unless the entry
+  goes on with a *; numbers standing for letters ("sh1t") count. On by
+  default; `--bad-words FILE` gives a server's own list, `--no-clean`
+  turns it off.
+
 ## Testing
 
 - Realm logic: several `FakeTerminal` sessions in one test.
