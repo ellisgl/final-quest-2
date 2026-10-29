@@ -64,11 +64,11 @@ export default {
         82: {
             // Runs every time screen 82 is drawn (after the game's own).
             show: (g) => {
-                g.overlay('{x 9}{y 9}{lightcyan}○');
+                g.overlay('{x 10}{y 10}{lightcyan}○');
             },
-            // Runs when the player steps on (9,9).
+            // Runs when the player steps on (10,10).
             at: {
-                '9,9': async (g, mod) => {
+                '10,10': async (g, mod) => {
                     g.cls();
                     g.print('An old stone well.', '');
                     if ((await g.choice(['Make a wish', 'Walk on'])) === 0 && (await g.spend(1))) {
@@ -104,7 +104,10 @@ export default {
   with the game's or another mod's. The game's own flags are in `g.flags`
   (untyped: `g.flags['ownsCastle']`).
 - **`screens`** gives `show` and `at` scripts for any screen, the game's
-  or the mod's own (from `maps/`). Tiles are `"x,y"`. (The game's own
+  or the mod's own (from `maps/`). Tiles are `"x,y"`, counting from 1
+  (the top left cell is `"1,1"`), as `{x}` and `{y}` in markup, the level
+  editor and the position SDEB shows do. Icy Draw counts from 0: add 1 to
+  both of its numbers, so its 8,8 is `"9,9"`. (The game's own
   screens name their triggers by a character marked on their maps; a mod's
   maps can't mark them yet, so mods use `at`.)
 - **`events`** are scripts for monsters' after-fight hooks: a monster in

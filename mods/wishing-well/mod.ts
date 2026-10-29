@@ -3,8 +3,10 @@
 // It shows a mod's own flags (wishes), a new item (items.json), a show
 // script that draws on an existing screen, and a trigger on a free tile.
 //
-// The folder's name starts with _, so it's switched off: rename it to
-// wishing-well to play with it.
+// It's switched off until it's named in .env: FQ2_ENABLE_MODS=wishing-well.
+//
+// The well is at 10,10: rows and columns count from 1 (Icy Draw, which
+// counts from 0, shows it at 9,9).
 
 import type { Mod } from '@fq2ts/engine/mods';
 
