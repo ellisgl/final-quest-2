@@ -30,7 +30,7 @@ Items are defined in `data/items.json` and monsters and encounter tables in `dat
 
 ## Jobs
 
-The old woman in your house (once she's offered her cocoa), the nurse at Hill Valley's healer's hut, the man by the fire in the Moorish village and Port City's bartender have work: deliveries to one of the others, for $40-$100 and more the more you've done, as in LORD II's jobs. One at a time, 4 offers a day, and a bonus for delivering the same day. The inventory (I) shows the job you're on and how many you've done. They work the same alone and on the server, where the news says who made deliveries. ([content/scripts/jobs.ts](content/scripts/jobs.ts) has what each of them says.)
+The old woman in your house (once she's offered her cocoa), the nurse at Hill Valley's healer's hut, the man by the fire in the Moorish village and Port City's bartender have work: deliveries to one of the others, for $40-$100 and more the more you've done, as in LORD II's jobs. One at a time, 4 offers a day, and a bonus for delivering the same day. The inventory (I) shows the job you're on and how many you've done. They work the same alone and on the server, where the news says who made deliveries and L ranks how many each player has done. ([content/scripts/jobs.ts](content/scripts/jobs.ts) has what each of them says.)
 
 ## Multiplayer server
 

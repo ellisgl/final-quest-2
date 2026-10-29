@@ -219,6 +219,10 @@ Each phase ends playable, tested and committed.
   first ("You'll sleep here, where anyone can attack you..."), with
   "Return to the game" picked (and Escape for it) and "Leave anyway"
   below. (Closing the browser leaves without a warning.)
+- **Jobs** (the engine's, LORD II's deliveries: see the README) are in
+  L: each player's jobs done is kept beside their save (database step
+  12), and L has a Jobs column for a game whose flags have the engine's
+  `jobsDone`.
 
 ## Testing
 
