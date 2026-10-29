@@ -2,7 +2,8 @@
 
 import { describe, expect, test } from 'bun:test';
 import content from '../../content/index.ts';
-import { newPlayer, row, scriptContext, trigger } from '../helpers.ts';
+import { PORT_CITY_FARE } from '../../content/scripts/ferry.ts';
+import { newPlayer, pick, row, screenText, scriptContext, trigger } from '../helpers.ts';
 
 const show = (screen: number) => {
     const script = content.screens[screen]?.show;
@@ -120,14 +121,44 @@ describe('the warps west of the Moorish village', () => {
     });
 });
 
-describe("the boat to the dragon's island", () => {
-    test('out and back', async () => {
-        const out = scriptContext({ player: newPlayer({ screen: 166 }), steps: ['x'] });
+describe('the ferry', () => {
+    test("to the dragon's island and back, free", async () => {
+        const out = scriptContext({ player: newPlayer({ screen: 166, gold: 0 }), steps: ['enter', 'x'] });
         await trigger(166, 46, 5)(out.g);
         expect(out.g.destination).toEqual({ screen: 86, x: 42, y: 18 });
-        const back = scriptContext({ player: newPlayer({ screen: 86 }), steps: ['x'] });
+        const back = scriptContext({ player: newPlayer({ screen: 86, gold: 0 }), steps: ['enter', 'x'] });
         await trigger(86, 43, 19)(back.g);
         expect(back.g.destination).toEqual({ screen: 166, x: 46, y: 6 });
+    });
+
+    test(`to Port City for $${PORT_CITY_FARE}, with a pass; and back to the docks`, async () => {
+        const noPass = scriptContext({
+            player: newPlayer({ screen: 166, gold: 100 }),
+            steps: [
+                ...pick(1),
+                () => {
+                    expect(screenText(noPass.term.screen)).toContain("They won't let you off the boat without a pass");
+                    return 'x';
+                },
+            ],
+        });
+        await trigger(166, 46, 5)(noPass.g);
+        expect([noPass.g.destination, noPass.g.gold]).toEqual([null, 100]);
+
+        const out = scriptContext({ player: newPlayer({ screen: 166, gold: 100, items: { 'port-city-pass': 1 } }), steps: [...pick(1), 'x'] });
+        await trigger(166, 46, 5)(out.g);
+        expect(out.g.destination).toEqual({ screen: 486, x: 49, y: 5 });
+        expect(out.g.gold).toBe(100 - PORT_CITY_FARE);
+
+        // (From the Boathouse: the Docks first, then the island.)
+        const back = scriptContext({ player: newPlayer({ screen: 486, gold: PORT_CITY_FARE }), steps: ['enter', 'x'] });
+        await trigger(486, 49, 6)(back.g);
+        expect(back.g.destination).toEqual({ screen: 166, x: 46, y: 6 });
+        expect(back.g.gold).toBe(0);
+
+        const poor = scriptContext({ player: newPlayer({ screen: 486, gold: 0 }), steps: ['enter', 'x'] });
+        await trigger(486, 45, 6)(poor.g);
+        expect(poor.g.destination).toBeNull();
     });
 });
 

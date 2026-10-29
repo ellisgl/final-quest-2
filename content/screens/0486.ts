@@ -5,6 +5,7 @@ import type { Flags, Shared } from '../start.ts';
 import { door } from './common.ts';
 import { bank } from '../scripts/town.ts';
 import { cityGuards } from '../scripts/places.ts';
+import { ferry } from '../scripts/ferry.ts';
 
 const screen: ScreenScripts<Flags, Shared> = {
     triggers: {
@@ -17,6 +18,7 @@ const screen: ScreenScripts<Flags, Shared> = {
         D: door(1041, 39, 17),
         d: door(1042, 41, 18),
         A: door(1043, 41, 18),
+        B: ferry('port', '{lightgreen}Boats bob at the pier behind the {yellow}Boathouse{lightgreen}.'),
     },
 };
 
