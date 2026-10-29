@@ -22,7 +22,7 @@ bun run debug          # or: bun fq2.ts --debug   (position display, S = setting
 
 Saved games go to `saves/` as JSON. The game draws in true colour, 256 colours or 16, depending on what the terminal says it supports (`COLORTERM` and `TERM`). Set `FQ2_COLORS` to `true`, `256` or `16` to choose for yourself.
 
-While exploring: arrows (or 8 4 6 2) walk, **I** or **V** shows your stats and inventory (pick an item to use, equip or drop it), **M** the world map, **B** the last messages, **R** redraws the screen, **?** lists the keys and **Esc** goes back to the title menu.
+While exploring: arrows (or 8 4 6 2) walk, **I** or **V** shows your stats and inventory (pick an item to use, equip or drop it), **M** the world map (what you've seen of it: each outdoor screen you've been to and the ones around it; the rest is dark until you find it), **B** the last messages, **R** redraws the screen, **?** lists the keys and **Esc** goes back to the title menu.
 
 Text and maps are Unicode (UTF-8): a map cell can hold any character one column wide (letters with accents, Greek, Cyrillic, box drawing, blocks, symbols...), but not wide ones like emoji or CJK, which would put the screen out of line. Anything that doesn't fit a cell is shown as `?`.
 

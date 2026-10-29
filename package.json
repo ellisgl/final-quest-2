@@ -6,12 +6,12 @@
   "type": "module",
   "license": "MIT",
   "dependencies": {
-    "@fq2ts/engine": "github:ellisgl/fq2ts-engine#61f95974d3132b2ea9fc310083790d127639f6fd",
+    "@fq2ts/engine": "github:ellisgl/fq2ts-engine#9e884bbb65c98a256ebefe278c361e807d8923e2",
     "@fq2ts/server": "github:ellisgl/fq2ts-server#v0.8.0",
     "@fq2ts/tools": "github:ellisgl/fq2ts-tools#v0.4.0"
   },
   "overrides": {
-    "@fq2ts/engine": "github:ellisgl/fq2ts-engine#61f95974d3132b2ea9fc310083790d127639f6fd"
+    "@fq2ts/engine": "github:ellisgl/fq2ts-engine#9e884bbb65c98a256ebefe278c361e807d8923e2"
   },
   "scripts": {
     "start": "bun fq2.ts",
