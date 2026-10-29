@@ -187,7 +187,9 @@ describe('inns', () => {
     test('every inn can be reached: outdoors, or a door leads into it', () => {
         const world = gameWorld();
         const inns = [...Array(GRID_WIDTH * GRID_HEIGHT).keys()].map((i) => i + 1).filter((n) => world.isInn(n));
-        expect(inns).toEqual([721, 724, 1042, 1122]);
+        expect(inns).toEqual([724, 1042, 1122]);
+        // (And your house is home: you sleep there for nothing.)
+        expect(world.isHome(721)).toBe(true);
         // (A door's script says where it goes: "door to screen N at x,y".)
         const doors = Object.values(placedScreens())
             .flatMap((screen) => Object.values(screen?.at ?? {}))

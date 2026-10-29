@@ -2,7 +2,7 @@
   "screen": 721,
   "name": "Your House",
   "kind": 2,
-  "inn": true,
+  "home": true,
   "tiles": [
     "       ♠♠                                               ♠♠           ♠♠♠  ♠♠ ♠♠",
     "   ♠♠ ♠♠♠♠                                            ♠♠♠            ♠♠♠ ♠♠♠♠♠♠",

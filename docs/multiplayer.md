@@ -211,7 +211,10 @@ Each phase ends playable, tested and committed.
   whoever it was saying how it went. A player on 1 hitpoint can't be
   fought, so a beaten player isn't beaten again. Inns (screens marked
   `"inn": true` in their map files, I in the editor's overview) are the
-  only safe place to leave. In FQ2: your house in Stone Valley, the
+  only safe places to leave, with homes (`"home": true`, H in the
+  editor's overview), where leaving the realm, however it's left, is
+  sleeping safely in one's own bed, for nothing: in FQ2, your house in
+  Stone Valley. FQ2's inns: the
   hotel in Hill Valley, the bar in Port City, and the Red Dragon Inn (a
   room through the inn's door in the walled town north of Port City,
   screen 406; screens 1121-1125 are unused copies of that town). Z there
