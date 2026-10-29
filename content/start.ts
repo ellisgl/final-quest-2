@@ -2,6 +2,7 @@
 // about what they've done.
 
 import type { Player } from '@fq2ts/engine/player';
+import { JOB_FLAGS, type JobFlags } from '@fq2ts/engine/jobs';
 import type { Script as EngineScript, ScriptContext } from '@fq2ts/engine/script';
 import { wyrmMaxHp } from './scripts/realm.ts';
 import { envFlag } from './env.ts';
@@ -23,7 +24,8 @@ export type Flags = {
     foundMinigun: boolean;
     // The day this player last fought the Wyrm (once a day).
     wyrmDay: string;
-};
+    // (And the player's delivery job, if they have one: scripts/jobs.ts.)
+} & JobFlags;
 
 // What belongs to the world, not one player: on a server, everyone shares
 // it. (In single-player it's saved with the game.)
@@ -87,6 +89,7 @@ export const start: Player<Flags> = {
         hadDrink: false,
         foundMinigun: false,
         wyrmDay: '',
+        ...JOB_FLAGS,
     },
 };
 

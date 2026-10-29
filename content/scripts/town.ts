@@ -2,6 +2,7 @@
 
 import type { ItemDef } from '@fq2ts/engine/items';
 import { about, type G, type Script } from '../start.ts';
+import { jobs } from './jobs.ts';
 
 const CONTINUE = '{lightgreen}<{green}Continue{lightgreen}>';
 
@@ -201,7 +202,11 @@ export async function healer(g: G): Promise<void> {
             '{green}The nurse says, "{white}How may we help you?{green}"',
             '',
         );
-        const choice = await g.choice(['Ask for a complete heal...', 'Ask for some damage, but not all, to be healed...', 'Leave the hut...']);
+        const choice = await g.choice(['Ask for a complete heal...', 'Ask for some damage, but not all, to be healed...', jobs.label(g, 'nurse'), 'Leave the hut...']);
+        if (choice === 2) {
+            await jobs.talk(g, 'nurse');
+            continue;
+        }
 
         if (choice === 0) {
             const cost = (g.maxHp - g.hp) * 2;

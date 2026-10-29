@@ -218,7 +218,7 @@ describe('Master Roshi', () => {
 });
 
 describe('healer', () => {
-    const LEAVE = pick(2);
+    const LEAVE = pick(3);
 
     test('a complete heal costs $2 a hitpoint', async () => {
         const { g, term } = scriptContext({ player: newPlayer({ hp: 200, gold: 150 }), steps: [...pick(0), () => {

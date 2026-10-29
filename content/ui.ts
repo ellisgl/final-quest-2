@@ -9,6 +9,7 @@ import type { Config, Content } from '@fq2ts/engine/game';
 import type { Player } from '@fq2ts/engine/player';
 import type { ItemDef } from '@fq2ts/engine/items';
 import type { Flags, G, Shared } from './start.ts';
+import { jobs } from './scripts/jobs.ts';
 
 // Screens drawn in Icy Draw (data/art/*.icy). Their tags say where text
 // from config.json goes: each @TITLE@, @VERSION@, @REVISION@ and @COMPANY@
@@ -69,6 +70,13 @@ export const worldMapLegend: readonly string[] = pictureMarkup(flatten(art('lege
 export const statusLine = (p: Player<Flags>, { title, companyShort }: Config): string =>
     `${title} -- ${p.name ? escapeMarkup(p.name) : `By ${companyShort}`} -- HP (${p.hp}/${p.maxHp}) -- Gold: ${p.gold}!`;
 
+// The delivery the player is making, and how many they've made.
+function jobLine(g: G): string {
+    const job = jobs.job(g);
+    const done = `{white}Jobs done {lightcyan}${g.flags.jobsDone}`;
+    return job ? `${done}   {white}Taking {yellow}a ${job.item}{white} to ${job.to.name} in ${job.to.town}` : done;
+}
+
 // The inventory (I): the player's stats and items. Picking an item offers
 // what can be done with it.
 export async function inventory(g: G): Promise<void> {
@@ -82,6 +90,7 @@ export async function inventory(g: G): Promise<void> {
             `{white}Experience {lightcyan}${g.exp}   {white}Hitpoints {lightred}${g.hp}/${g.maxHp}   {white}Gold {yellow}$${g.gold}${bank}`,
             `{white}Strength {lightcyan}${g.strength}   {white}Defense {lightcyan}${g.defense}`,
             `{white}Weapon {lightmagenta}${g.weapon?.name ?? 'nothing'}   {white}Armour {lightmagenta}${g.armour?.name ?? 'nothing'}`,
+            jobLine(g),
             '',
             message ? `{yellow}${message}` : '{green}Pick an item to see what you can do with it.',
             '',

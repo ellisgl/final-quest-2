@@ -39,11 +39,20 @@ describe('the old woman', () => {
         expect(second.g.maxHp).toBe(250);
     });
 
-    test('after that she only shouts', async () => {
+    test('after that she shouts, but has work', async () => {
         mocks.push(spyOn(Math, 'random').mockReturnValue(0.99));
-        const { g, term } = scriptContext({ player: newPlayer({}, { womanOffersCocoa: false }) });
+        const { g, term } = scriptContext({
+            player: newPlayer({}, { womanOffersCocoa: false }),
+            steps: [
+                () => {
+                    expect(row(term.screen, 1)).toContain('"What the hell do you want!?!"');
+                    expect(screenText(term.screen)).toContain('Ask about work...');
+                    return 'escape';
+                },
+            ],
+        });
         await oldWoman(g);
-        expect(row(term.screen, 23)).toContain('"What the hell do you want!?!"');
+        expect(term.remaining).toBe(0);
     });
 });
 
@@ -145,7 +154,7 @@ describe('the bar', () => {
         const { g, term } = scriptContext({ steps: [...pick(0), 'x', 'x', ...pick(0), () => {
             expect(row(term.screen, 1)).toContain('Only one drink today.');
             return 'x';
-        }, ...pick(2)] });
+        }, ...pick(3)] });
         await bar(g);
         expect(g.flags.hadDrink).toBe(true);
     });
@@ -154,7 +163,7 @@ describe('the bar', () => {
         const { g, term } = scriptContext({ steps: [...pick(1), () => {
             expect(row(term.screen, 1)).toContain("I've got nothing to say to you.");
             return 'x';
-        }, ...pick(2)] });
+        }, ...pick(3)] });
         await bar(g);
         expect(g.flags.hadDrink).toBe(false);
     });

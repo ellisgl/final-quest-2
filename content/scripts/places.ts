@@ -4,6 +4,7 @@ import { at } from '@fq2ts/engine/assert';
 import { escapeMarkup } from '@fq2ts/engine/text';
 import type { G } from '../start.ts';
 import { hero } from './realm.ts';
+import { jobs } from './jobs.ts';
 
 const CONTINUE = '{lightgreen}<{green}Continue{lightgreen}>';
 
@@ -16,7 +17,8 @@ export async function oldWoman(g: G): Promise<void> {
             "Oh.. It's you again!?!?",
             'What the hell do you want!?!',
         ];
-        g.write(`{white}An old woman says "{yellow}${at(lines, g.random(lines.length) - 1)}{white}"`);
+        // (Once she's offered her cocoa, she has work, too: scripts/jobs.ts.)
+        await jobs.giver('woman', `{white}An old woman says "{yellow}${at(lines, g.random(lines.length) - 1)}{white}"`)(g);
         return;
     }
 
@@ -139,8 +141,12 @@ export async function bar(g: G): Promise<void> {
     for (;;) {
         g.cls();
         g.print('', '{green}The bartender asks, "{white}What\'ll it be?{green}"', '');
-        const choice = await g.choice(['Ask for the best drink in the house...', 'Chat with the bartender...', 'Leave...']);
+        const choice = await g.choice(['Ask for the best drink in the house...', 'Chat with the bartender...', jobs.label(g, 'bartender'), 'Leave...']);
         g.cls();
+        if (choice === 2) {
+            await jobs.talk(g, 'bartender');
+            continue;
+        }
         if (choice === 0 && g.flags.hadDrink) {
             g.print('{green}The bartender looks at you and says, "{white}Only one drink today.{green}"', '', CONTINUE);
             await g.key();

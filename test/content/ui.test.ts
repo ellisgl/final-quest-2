@@ -76,10 +76,10 @@ describe('inventory', () => {
                     expect(text).toContain('Experience 9   Hitpoints 250/250   Gold $50');
                     expect(text).not.toContain('Bank');
                     expect(text).toContain('Weapon Stick   Armour nothing');
-                    expect(row(term.screen, 9)).toStartWith('Stick               (in use) A sturdy stick.');
-                    expect(row(term.screen, 10)).toStartWith('Wildberries x10     Small, sweet');
-                    expect(row(term.screen, 11)).toStartWith('Port City Pass      (quest) Lets you through');
-                    expect(row(term.screen, 12)).toBe('Done');
+                    expect(row(term.screen, 10)).toStartWith('Stick               (in use) A sturdy stick.');
+                    expect(row(term.screen, 11)).toStartWith('Wildberries x10     Small, sweet');
+                    expect(row(term.screen, 12)).toStartWith('Port City Pass      (quest) Lets you through');
+                    expect(row(term.screen, 13)).toBe('Done');
                     return DONE;
                 },
             ],
@@ -109,7 +109,7 @@ describe('inventory', () => {
                 ...pick(1),
                 ...pick(0),
                 () => {
-                    expect(row(term.screen, 7)).toBe('You ready your Shotgun.');
+                    expect(row(term.screen, 8)).toBe('You ready your Shotgun.');
                     return 'down';
                 },
                 'enter',
@@ -129,7 +129,7 @@ describe('inventory', () => {
                 ...pick(0),
                 ...pick(0),
                 () => {
-                    expect(row(term.screen, 7)).toBe('You eat some wildberries. Delicious! (+5 hitpoints)');
+                    expect(row(term.screen, 8)).toBe('You eat some wildberries. Delicious! (+5 hitpoints)');
                     return DONE;
                 },
             ],

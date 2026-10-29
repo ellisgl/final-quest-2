@@ -3,11 +3,12 @@
 import type { ScreenScripts } from '@fq2ts/engine/game';
 import type { Flags, Shared } from '../start.ts';
 import { say, door } from './common.ts';
+import { jobs } from '../scripts/jobs.ts';
 
 const screen: ScreenScripts<Flags, Shared> = {
     triggers: {
         W: say('{lightcyan}What a wonderful place for a camp fire.'),
-        T: say('{white}The man, although interested at your presence, ignores you.'),
+        T: jobs.giver('moor', '{white}The man, although interested at your presence, ignores you.'),
         M: say('{white}Mooooooooooooo!!!'),
         D: door(804, 40, 15),
         X(g) {
