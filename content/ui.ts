@@ -10,6 +10,7 @@ import type { Player } from '@fq2ts/engine/player';
 import type { ItemDef } from '@fq2ts/engine/items';
 import type { Flags, G, Shared } from './start.ts';
 import { jobs } from './scripts/jobs.ts';
+import { alignmentText } from './scripts/deeds.ts';
 
 // Screens drawn in Icy Draw (data/art/*.icy). Their tags say where text
 // from config.json goes: each @TITLE@, @VERSION@, @REVISION@ and @COMPANY@
@@ -88,7 +89,7 @@ export async function inventory(g: G): Promise<void> {
             `{yellow}{center}${g.name ? `${escapeMarkup(g.name)}${g.title ? ` ${escapeMarkup(g.title)}` : ''}'s Inventory` : 'Inventory'}`,
             '',
             `{white}Experience {lightcyan}${g.exp}   {white}Hitpoints {lightred}${g.hp}/${g.maxHp}   {white}Gold {yellow}$${g.gold}${bank}`,
-            `{white}Strength {lightcyan}${g.strength}   {white}Defense {lightcyan}${g.defense}`,
+            `{white}Strength {lightcyan}${g.strength}   {white}Defense {lightcyan}${g.defense}   {white}Alignment ${alignmentText(g.alignment)}`,
             `{white}Weapon {lightmagenta}${g.weapon?.name ?? 'nothing'}   {white}Armour {lightmagenta}${g.armour?.name ?? 'nothing'}`,
             jobLine(g),
             '',

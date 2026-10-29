@@ -21,7 +21,7 @@ const content: Content<Flags, Shared> = {
     daily: ['hadDrink'],
     keys: {
         F: { help: 'fame: the hall of heroes, the castle and the Wyrm', run: fame },
-        U: { help: "the Wyrmslayer's gift: heal your wounds, once a day", run: wyrmslayersGift },
+        U: { help: "the Wyrm's gift, once a day: the Wyrmslayer heals; the Wyrmsworn curses someone next to them", run: wyrmslayersGift },
     },
     world: shared,
     screens,

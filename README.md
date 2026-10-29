@@ -32,6 +32,10 @@ Items are defined in `data/items.json` and monsters and encounter tables in `dat
 
 The old woman in your house (once she's offered her cocoa), the nurse at Hill Valley's healer's hut, the man by the fire in the Moorish village and Port City's bartender have work: deliveries to one of the others, for $40-$100 and more the more you've done, as in LORD II's jobs. One at a time, 4 offers a day, and a bonus for delivering the same day. The inventory (I) shows the job you're on and how many you've done. They work the same alone and on the server, where the news says who made deliveries and L ranks how many each player has done. ([content/scripts/jobs.ts](content/scripts/jobs.ts) has what each of them says.)
 
+## Good and evil
+
+As in LORD II, you can be good or evil: your alignment, from -10 to +10, shows on the inventory (I) and in L, and moves with what you do (each deed counts once a day). Tip the bar's miserable cleaner or laugh at him; help the old woman tidy up or go through her cupboard; feed the Moorish village's cow or kick it; take the rich couple's purse; and, on the server, attacking a sleeping player is a bad deed. People notice: at -3 the bartender won't serve you his best, at -5 the nurse charges double, and at -8 Port City's guards (and its ferryman) won't let you in, pass or no pass. At -5 or below, the Wyrm will take you: kneel before it instead of fighting and you're **the Wyrmsworn**, whose gift (U) is a curse, once a day, on a player next to you (a third of their hitpoints). Slay the Wyrm later and you're the Wyrmslayer instead; kneel after slaying it and you're the Wyrmsworn again. ([content/scripts/deeds.ts](content/scripts/deeds.ts) has the deeds and what people say.)
+
 ## The ferry
 
 Boats run between the Docks, the Dragon's Island and the Boathouse in Port City ([content/scripts/ferry.ts](content/scripts/ferry.ts)). The island run is free; Port City is $40 each way, and nobody gets off there without the Port City pass.

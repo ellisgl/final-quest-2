@@ -3,6 +3,7 @@
 // fare, and its guards won't let anyone off without a pass.
 
 import { about, type G, type Script } from '../start.ts';
+import { WANTED } from './deeds.ts';
 
 // What a trip to Port City (or back) costs.
 export const PORT_CITY_FARE = 40;
@@ -28,6 +29,12 @@ export const ferry = (here: Landing, ...greeting: string[]): Script =>
             'Stay here...',
         ])];
         if (!picked) {
+            return;
+        }
+
+        if (picked === 'port' && g.alignment <= WANTED) {
+            g.print('', '{white}"{yellow}Port City? Not you, friend. The guards there know your face.{white}"', '', '{lightgreen}Press a key...');
+            await g.key();
             return;
         }
 

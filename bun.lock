@@ -5,8 +5,8 @@
     "": {
       "name": "final-quest-2",
       "dependencies": {
-        "@fq2ts/engine": "github:ellisgl/fq2ts-engine#40f31495427fda3620c714344698f53910ffa6e6",
-        "@fq2ts/server": "github:ellisgl/fq2ts-server#v0.10.0",
+        "@fq2ts/engine": "github:ellisgl/fq2ts-engine#49c60125978b3024349173765cd509fa669f8942",
+        "@fq2ts/server": "github:ellisgl/fq2ts-server#v0.11.0",
         "@fq2ts/tools": "github:ellisgl/fq2ts-tools#v0.4.0",
       },
       "devDependencies": {
@@ -19,7 +19,7 @@
     },
   },
   "overrides": {
-    "@fq2ts/engine": "github:ellisgl/fq2ts-engine#40f31495427fda3620c714344698f53910ffa6e6",
+    "@fq2ts/engine": "github:ellisgl/fq2ts-engine#49c60125978b3024349173765cd509fa669f8942",
   },
   "packages": {
     "@cacheable/memory": ["@cacheable/memory@2.2.0", "", { "dependencies": { "@cacheable/utils": "^2.5.0", "@keyv/bigmap": "^1.3.1", "hookified": "^1.15.1", "keyv": "^5.6.0" } }, "sha512-CTLKqLItRCEixEAewD3/j9DB3/o96gpTPD4eJ1v+DGOlxZRZncRQkGYqqnAGCscYd6RNeXfGeiuCphsPtqyIfQ=="],
@@ -40,9 +40,9 @@
 
     "@eslint/plugin-kit": ["@eslint/plugin-kit@0.7.3", "", { "dependencies": { "@eslint/core": "^1.2.1", "levn": "^0.4.1" } }, "sha512-IkO+/KEUvwbVpiURZg+P7zF74z5Jxe0UgJxVni+RtoHQ6IZieXaO02kmadomap/q+l6bc/jdPGGqTjhuZnuz1Q=="],
 
-    "@fq2ts/engine": ["@fq2ts/engine@github:ellisgl/fq2ts-engine#40f3149", {}, "ellisgl-fq2ts-engine-40f3149", "sha512-5YZ/wF8lljNIEMdCaRyTk4eeXHgyUY/6yqK0SywyiAezLHzbpjy06mpBAO9ZuaoqFYiOvnzW3i2QE1sZC4pKMA=="],
+    "@fq2ts/engine": ["@fq2ts/engine@github:ellisgl/fq2ts-engine#49c6012", {}, "ellisgl-fq2ts-engine-49c6012", "sha512-ANPBIQsVwC4KTw8iWPyj/KK/KdeiqdHIyFT6Ep2yHrn36A6Qb5XnKZRJ5dxv68PoNDaC+EBLqWqy+QtoHAQZsQ=="],
 
-    "@fq2ts/server": ["@fq2ts/server@github:ellisgl/fq2ts-server#05780f3", { "dependencies": { "@fq2ts/engine": "github:ellisgl/fq2ts-engine#v0.10.0", "@types/nodemailer": "^8.0.2", "@wterm/dom": "0.5.7", "nodemailer": "^10.2.1" } }, "ellisgl-fq2ts-server-05780f3", "sha512-+O8NxdYKfnn5liI0M6TzVljlNMsKVXa2Hw8a1cmOteeQfQRl8sUGmTCwb55I8mY6esoBoUHOqHfqWn1Z55OsWQ=="],
+    "@fq2ts/server": ["@fq2ts/server@github:ellisgl/fq2ts-server#a4ec3a3", { "dependencies": { "@fq2ts/engine": "github:ellisgl/fq2ts-engine#v0.11.0", "@types/nodemailer": "^8.0.2", "@wterm/dom": "0.5.7", "nodemailer": "^10.2.1" } }, "ellisgl-fq2ts-server-a4ec3a3", "sha512-pjuJl3jYrY6Q3pqfY/N6qTwXuw/LTsmfxa1erc5Y7hKJfX7nRxJyYgL5gKzWCCwt6pHAf4kk0tBoSOYXirR0+g=="],
 
     "@fq2ts/tools": ["@fq2ts/tools@github:ellisgl/fq2ts-tools#31427ed", { "dependencies": { "@fq2ts/engine": "github:ellisgl/fq2ts-engine#v0.7.0" } }, "ellisgl-fq2ts-tools-31427ed", "sha512-l5n8xUHB9vFw99a+wbRx3OaL33wrR7gu+0dqPtQq1l+0EdScvRqWrP3Ph/zVfLFq2NCH45Qf8emuUMDLHbHqEw=="],
 

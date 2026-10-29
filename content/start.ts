@@ -31,6 +31,13 @@ export type Flags = {
     // the day they last used the Wyrmslayer's gift (U: a full heal, once a day).
     wyrmslayer: boolean;
     giftDay: string;
+    // Whether this player has knelt before the Wyrm (and is the Wyrmsworn,
+    // whose gift is a curse); one or the other, not both.
+    wyrmsworn: boolean;
+    // The good and bad deeds done on deedsDay, by name, with commas (each
+    // counts once a day: scripts/deeds.ts).
+    deedsDay: string;
+    deeds: string;
     // (And the player's delivery job, if they have one: scripts/jobs.ts.)
 } & JobFlags;
 
@@ -83,6 +90,8 @@ export const start: Player<Flags> = {
     armour: null,
     monsters: monstersSetting(),
     superhuman: false,
+    // (Good or evil: scripts/deeds.ts.)
+    alignment: 0,
     flags: {
         toiletUsed: false,
         goldNearBarn: true,
@@ -99,6 +108,9 @@ export const start: Player<Flags> = {
         arenaLostDay: '',
         wyrmslayer: false,
         giftDay: '',
+        wyrmsworn: false,
+        deedsDay: '',
+        deeds: '',
         ...JOB_FLAGS,
     },
 };

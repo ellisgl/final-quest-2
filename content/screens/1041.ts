@@ -2,14 +2,15 @@
 
 import type { ScreenScripts } from '@fq2ts/engine/game';
 import type { Flags, Shared } from '../start.ts';
-import { say, door, nightstand, sink, stove } from './common.ts';
+import { say, door, sink, stove } from './common.ts';
+import { richNightstand } from '../scripts/deeds.ts';
 
 const screen: ScreenScripts<Flags, Shared> = {
     triggers: {
         D: door(486, 17, 6),
         A: say('{white}A ball room floor!'),
         Y: say('{white}You take a chair!'),
-        a: nightstand,
+        a: richNightstand,
         W: say('{white}What a wonderful view out this window!'),
         w: say('{white}What a huge bed!'),
         B: sink,

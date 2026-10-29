@@ -231,6 +231,13 @@ Each phase ends playable, tested and committed.
   collects the bounty (it comes off the board), one who's beaten leaves
   it. The news has both.
 
+- **Good and evil**: each save keeps its player's alignment beside it
+  (database step 14), and L has an Align column for a game that uses it
+  (its start player has `alignment`). Attacking a sleeping player costs
+  1. The engine's `g.nearby()` is the players next to this one, from the
+  server (none alone), each with `wound(amount, why)`: FQ2's Wyrmsworn
+  curse them with it.
+
 ## Testing
 
 - Realm logic: several `FakeTerminal` sessions in one test.

@@ -3,6 +3,7 @@
 import type { ItemDef } from '@fq2ts/engine/items';
 import { about, type G, type Script } from '../start.ts';
 import { jobs } from './jobs.ts';
+import { EVIL } from './deeds.ts';
 
 const CONTINUE = '{lightgreen}<{green}Continue{lightgreen}>';
 
@@ -189,8 +190,9 @@ export async function roshi(g: G): Promise<void> {
     await g.key();
 }
 
-// Healing costs $2 per hitpoint.
+// Healing costs $2 per hitpoint ($4 for the evil).
 export async function healer(g: G): Promise<void> {
+    const rate = g.alignment <= EVIL ? 4 : 2;
     for (;;) {
         g.cls();
         g.print(
@@ -199,7 +201,7 @@ export async function healer(g: G): Promise<void> {
             '{green}You walk into the healers hut and find that the place already quite full.',
             '{green}You take a number, and then a seat.  Finally, you hear your number called.',
             '',
-            '{green}The nurse says, "{white}How may we help you?{green}"',
+            g.alignment <= EVIL ? '{green}The nurse looks at you coldly. "{white}For your kind, it\'s double.{green}"' : '{green}The nurse says, "{white}How may we help you?{green}"',
             '',
         );
         const choice = await g.choice(['Ask for a complete heal...', 'Ask for some damage, but not all, to be healed...', jobs.label(g, 'nurse'), 'Leave the hut...']);
@@ -209,10 +211,10 @@ export async function healer(g: G): Promise<void> {
         }
 
         if (choice === 0) {
-            const cost = (g.maxHp - g.hp) * 2;
+            const cost = (g.maxHp - g.hp) * rate;
             g.cls();
             g.print(
-                '{green}It costs {yellow}2${green} for every hitpoint healed.',
+                `{green}It costs {yellow}$${rate}{green} for every hitpoint healed.`,
                 '',
                 `{green}You have {white}${g.hp} {green}hitpoints.`,
                 `{green}It will cost you {yellow}${cost}{yellow} {green}to be completely healed.`,
@@ -240,10 +242,10 @@ export async function healer(g: G): Promise<void> {
         }
 
         if (choice === 1) {
-            const affordable = Math.min(Math.trunc(g.gold / 2), g.maxHp - g.hp);
+            const affordable = Math.min(Math.trunc(g.gold / rate), g.maxHp - g.hp);
             g.cls();
             g.print(
-                `{green}You have {white}${g.hp} {green}hitpoint(s).  It costs {yellow}$2{green} For every hitpoint`,
+                `{green}You have {white}${g.hp} {green}hitpoint(s).  It costs {yellow}$${rate}{green} For every hitpoint`,
                 `{green}we heal.  With your current funds, we could heal up to {white}${affordable} {green}hitpoints.`,
                 '',
                 '{green}Please input the amount of hitpoints to heal. Enter {lightgreen}({yellow}1{lightgreen}) {green}for all possible.:',
@@ -269,7 +271,7 @@ export async function healer(g: G): Promise<void> {
                 amount = affordable;
             }
             g.hp += amount;
-            g.gold -= amount * 2;
+            g.gold -= amount * rate;
             g.print('', '', '{lightcyan}All Done!!! {green}You are now healed.', CONTINUE);
             await g.key();
             return;

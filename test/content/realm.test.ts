@@ -123,28 +123,28 @@ describe('the Wyrm', () => {
 });
 
 describe('the Wyrmslayer', () => {
-    test('U heals fully once a day; not without wounds; and only for a Wyrmslayer', () => {
+    test('U heals fully once a day; not without wounds; and only for a Wyrmslayer', async () => {
         at(0);
         const { g } = scriptContext({ player: newPlayer({ hp: 10 }, { wyrmslayer: true }) });
         const write = spyOn(g, 'write');
-        wyrmslayersGift(g);
+        await wyrmslayersGift(g);
         expect(g.hp).toBe(g.maxHp);
         expect(write).toHaveBeenLastCalledWith("{lightmagenta}The Wyrm's blood burns in you, and your wounds close.");
         g.hp = 10;
-        wyrmslayersGift(g);
+        await wyrmslayersGift(g);
         expect(g.hp).toBe(10);
         expect(write).toHaveBeenLastCalledWith("{gray}The Wyrm's blood is quiet. Its gift comes again tomorrow.");
         at(1);
-        wyrmslayersGift(g);
+        await wyrmslayersGift(g);
         expect(g.hp).toBe(g.maxHp);
         at(2);
-        wyrmslayersGift(g);
+        await wyrmslayersGift(g);
         expect(write).toHaveBeenLastCalledWith("{gray}You've no wounds for the Wyrm's blood to heal.");
 
         const other = scriptContext({ player: newPlayer({ hp: 10 }) });
         const said = spyOn(other.g, 'write');
-        wyrmslayersGift(other.g);
-        expect([other.g.hp, said.mock.calls.at(-1)?.[0]]).toEqual([10, '{gray}Only one who has slain the Wyrm has that gift.']);
+        await wyrmslayersGift(other.g);
+        expect([other.g.hp, said.mock.calls.at(-1)?.[0]]).toEqual([10, '{gray}Only those the Wyrm has touched, slayer or sworn, have its gift.']);
     });
 
     test('those who slew it before there were titles are found on the hall of heroes', () => {

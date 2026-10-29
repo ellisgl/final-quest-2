@@ -9,6 +9,7 @@
 
 import type { Monster } from '@fq2ts/engine/combat';
 import { escapeMarkup } from '@fq2ts/engine/text';
+import { EVIL } from './deeds.ts';
 import type { G } from '../start.ts';
 
 const CONTINUE = '{lightgreen}<{green}Continue{lightgreen}>';
@@ -82,13 +83,24 @@ export async function wyrm(g: G): Promise<void> {
         '{gray}Everyone in the realm wears it down together: the last blow wins the day.',
         '',
     );
-    if (g.flags.wyrmDay === day) {
+    // The evil can kneel to it instead, and be the Wyrmsworn (not again).
+    const mayKneel = g.alignment <= EVIL && !g.flags.wyrmsworn;
+    if (g.flags.wyrmDay === day && !mayKneel) {
         g.print('{yellow}You have fought it today. It will be here tomorrow.', '', CONTINUE);
         await g.key();
         return;
     }
 
-    if ((await g.choice(['Fight it', 'Creep away'])) !== 0) {
+    const choice = await g.choice([
+        g.flags.wyrmDay === day ? { text: 'Fight it', show: false } : 'Fight it',
+        mayKneel ? 'Kneel before it' : { text: 'Kneel before it', show: false },
+        'Creep away',
+    ]);
+    if (choice === 1) {
+        await kneel(g);
+        return;
+    }
+    if (choice !== 0) {
         return;
     }
 
@@ -146,22 +158,49 @@ export const WYRMSLAYER = 'the Wyrmslayer';
 
 function becomeWyrmslayer(g: G): void {
     g.flags.wyrmslayer = true;
+    g.flags.wyrmsworn = false;
     g.title = WYRMSLAYER;
+}
+
+// The other way: kneeling to the Wyrm, the evil become the Wyrmsworn (no
+// longer the Wyrmslayer, if they were), and their gift is a curse.
+export const WYRMSWORN = 'the Wyrmsworn';
+
+async function kneel(g: G): Promise<void> {
+    g.flags.wyrmsworn = true;
+    g.flags.wyrmslayer = false;
+    g.title = WYRMSWORN;
+    hero(g, `${escapeMarkup(g.name)} knelt before the Wyrm, and swore to serve it.`);
+    g.cls();
+    g.print(
+        '{lightred}You kneel before the Wyrm.',
+        '',
+        '{gray}One great eye opens. A voice like a landslide fills your head:',
+        '{white}"{red}You will do. Go, and spread my shadow.{white}"',
+        '',
+        `{white}From now on you are {lightmagenta}${WYRMSWORN}{white}, and the Wyrm's gift to you is a curse:`,
+        '{white}once a day, press {yellow}U{white} next to another player to take a third of their hitpoints.',
+        '',
+        CONTINUE,
+    );
+    await g.key();
 }
 
 // Whether the player has slain the Wyrm. Those who did before there were
 // titles are found on the hall of heroes, and made Wyrmslayers then.
 export function isWyrmslayer(g: G): boolean {
-    if (!g.flags.wyrmslayer && g.name && g.world.heroes.some((deed) => deed.startsWith(`${escapeMarkup(g.name)} slew the Wyrm (`))) {
+    if (!g.flags.wyrmslayer && !g.flags.wyrmsworn && g.name && g.world.heroes.some((deed) => deed.startsWith(`${escapeMarkup(g.name)} slew the Wyrm (`))) {
         becomeWyrmslayer(g);
     }
     return g.flags.wyrmslayer;
 }
 
-// U: the Wyrmslayer's gift.
-export function wyrmslayersGift(g: G): void {
-    if (!isWyrmslayer(g)) {
-        g.write('{gray}Only one who has slain the Wyrm has that gift.');
+// U: the Wyrm's gift: the Wyrmslayer's heal, or the Wyrmsworn's curse.
+export async function wyrmslayersGift(g: G): Promise<void> {
+    if (g.flags.wyrmsworn) {
+        await curse(g);
+    } else if (!isWyrmslayer(g)) {
+        g.write('{gray}Only those the Wyrm has touched, slayer or sworn, have its gift.');
     } else if (g.flags.giftDay === today()) {
         g.write("{gray}The Wyrm's blood is quiet. Its gift comes again tomorrow.");
     } else if (g.hp >= g.maxHp) {
@@ -206,4 +245,32 @@ function returnsIn(slainOn: string): string {
 export async function hallOfHeroes(g: G): Promise<void> {
     const deeds = g.world.heroes;
     await g.scroll(deeds.length ? [...deeds].reverse().map((deed) => `{white}${deed}`) : ['{gray}The plaque is bare. Will your name be the first on it?'], 'The hall of heroes');
+}
+
+// The Wyrmsworn's curse: once a day, a third of the hitpoints of a player
+// next to them (on the server; alone, there's no one to curse).
+async function curse(g: G): Promise<void> {
+    if (g.flags.giftDay === today()) {
+        g.write("{gray}The Wyrm's shadow in you is spent. Its curse comes again tomorrow.");
+        return;
+    }
+
+    const near = g.nearby();
+    if (!near.length) {
+        g.write('{gray}There is no one close enough to curse.');
+        return;
+    }
+
+    g.cls();
+    g.print('{lightred}Curse whom?', '');
+    const victim = near[await g.choice([...near.map(({ name, hp, maxHp }) => `${escapeMarkup(name)} {gray}(${hp}/${maxHp})`), 'No one'])];
+    if (!victim) {
+        return;
+    }
+
+    g.flags.giftDay = today();
+    const amount = Math.max(1, Math.floor(victim.maxHp / 3));
+    victim.wound(amount, `{lightred}${escapeMarkup(g.name)} curses you in the Wyrm's name! You lose ${amount} hitpoints.`);
+    g.print('', `{lightmagenta}The Wyrm's shadow falls on ${escapeMarkup(victim.name)}: ${amount} hitpoints.`);
+    await g.key();
 }

@@ -5,6 +5,7 @@ import { escapeMarkup } from '@fq2ts/engine/text';
 import type { G } from '../start.ts';
 import { hero } from './realm.ts';
 import { jobs } from './jobs.ts';
+import { UNWELCOME, WANTED, womanDeeds } from './deeds.ts';
 
 const CONTINUE = '{lightgreen}<{green}Continue{lightgreen}>';
 
@@ -17,8 +18,20 @@ export async function oldWoman(g: G): Promise<void> {
             "Oh.. It's you again!?!?",
             'What the hell do you want!?!',
         ];
-        // (Once she's offered her cocoa, she has work, too: scripts/jobs.ts.)
-        await jobs.giver('woman', `{white}An old woman says "{yellow}${at(lines, g.random(lines.length) - 1)}{white}"`)(g);
+        // (Once she's offered her cocoa, she has work, too: scripts/jobs.ts;
+        // and chores, and a cupboard: scripts/deeds.ts.)
+        if (jobs.job(g)?.to.id === 'woman') {
+            await jobs.talk(g, 'woman');
+            return;
+        }
+        g.cls();
+        g.print(`{white}An old woman says "{yellow}${at(lines, g.random(lines.length) - 1)}{white}"`, '');
+        const choice = await g.choice([jobs.label(g, 'woman'), 'Help her tidy up...', 'Go through her cupboard...', 'Leave...']);
+        if (choice === 0) {
+            await jobs.talk(g, 'woman');
+        } else if (choice === 1 || choice === 2) {
+            await womanDeeds(g, choice === 1 ? 'help' : 'rifle');
+        }
         return;
     }
 
@@ -147,7 +160,10 @@ export async function bar(g: G): Promise<void> {
             await jobs.talk(g, 'bartender');
             continue;
         }
-        if (choice === 0 && g.flags.hadDrink) {
+        if (choice === 0 && g.alignment <= UNWELCOME) {
+            g.print('{green}The bartender looks you over, and says, "{white}Not for your kind. Water\'s over there.{green}"', '', CONTINUE);
+            await g.key();
+        } else if (choice === 0 && g.flags.hadDrink) {
             g.print('{green}The bartender looks at you and says, "{white}Only one drink today.{green}"', '', CONTINUE);
             await g.key();
         } else if (choice === 0) {
@@ -173,6 +189,11 @@ export async function bar(g: G): Promise<void> {
 }
 
 export async function cityGuards(g: G): Promise<void> {
+    if (g.has('port-city-pass') && g.alignment <= WANTED) {
+        g.write('{lightred}The guards know your face. "Not in our city, pass or no pass."');
+        g.moveTo(2, 9);
+        return;
+    }
     if (g.has('port-city-pass')) {
         g.write('{lightred}The guards eye you as you pass.');
         return;
