@@ -64,11 +64,11 @@ export default {
         82: {
             // Runs every time screen 82 is drawn (after the game's own).
             show: (g) => {
-                g.overlay('{x 36}{y 18}{lightcyan}○');
+                g.overlay('{x 9}{y 9}{lightcyan}○');
             },
-            // Runs when the player steps on (36,18).
+            // Runs when the player steps on (9,9).
             at: {
-                '36,18': async (g, mod) => {
+                '9,9': async (g, mod) => {
                     g.cls();
                     g.print('An old stone well.', '');
                     if ((await g.choice(['Make a wish', 'Walk on'])) === 0 && (await g.spend(1))) {

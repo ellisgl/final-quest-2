@@ -30,7 +30,7 @@ test('every mod in mods/ loads and fits the game', async () => {
 // FQ2 with the wishing well, and a player just north of it with some gold.
 async function wishingWell(wishes: number) {
     const modded = applyMods(fq2(), [await loadMod(join(MODS, 'wishing-well'))]);
-    const player = { ...newPlayer({ screen: 82, x: 36, y: 17, gold: 5, hp: 100 }), flags: { ...modded.content.start.flags, 'wishing-well.wishes': wishes } };
+    const player = { ...newPlayer({ screen: 82, x: 9, y: 8, gold: 5, hp: 100 }), flags: { ...modded.content.start.flags, 'wishing-well.wishes': wishes } };
     return makeGameWith(modded.content, { ...modded, config, player });
 }
 
