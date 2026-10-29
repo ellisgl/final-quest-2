@@ -37,6 +37,7 @@ import screen804 from './0804.ts';
 import screen805 from './0805.ts';
 import screen806 from './0806.ts';
 import screen406 from './0406.ts';
+import screen407 from './0407.ts';
 import screen486 from './0486.ts';
 import screen1041 from './1041.ts';
 import screen1042 from './1042.ts';
@@ -69,6 +70,7 @@ export const screens: Content<Flags, Shared>['screens'] = {
     805: screen805,
     806: screen806,
     406: screen406,
+    407: screen407,
     486: screen486,
     1041: screen1041,
     1042: screen1042,

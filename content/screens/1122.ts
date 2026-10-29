@@ -13,7 +13,7 @@ const screen: ScreenScripts<Flags, Shared> = {
         g.overlay('{x 30}{y 14}{gray}away.)');
     },
     triggers: {
-        D: door(406, 61, 9),
+        D: door(406, 57, 9),
     },
 };
 

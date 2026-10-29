@@ -165,12 +165,23 @@ describe('the ferry', () => {
 
 describe('inns', () => {
     test('the Red Dragon Inn: in from the town north of Port City, and out again', async () => {
-        const inn = scriptContext({ player: newPlayer({ screen: 406, x: 61, y: 9 }) });
-        await trigger(406, 61, 8)(inn.g);
-        expect(inn.g.destination).toEqual({ screen: 1122, x: 41, y: 17 });
+        // (Either of its two doors.)
+        for (const x of [57, 65]) {
+            const inn = scriptContext({ player: newPlayer({ screen: 406, x, y: 9 }) });
+            await trigger(406, x, 8)(inn.g);
+            expect(inn.g.destination).toEqual({ screen: 1122, x: 41, y: 17 });
+        }
         const out = scriptContext({ player: newPlayer({ screen: 1122, x: 41, y: 17 }) });
         await trigger(1122, 41, 18)(out.g);
-        expect(out.g.destination).toEqual({ screen: 406, x: 61, y: 9 });
+        expect(out.g.destination).toEqual({ screen: 406, x: 57, y: 9 });
+    });
+
+    test("the town's other doors say why they don't open", () => {
+        for (const [screen, x, y] of [[406, 26, 5], [406, 17, 9], [406, 22, 15], [406, 41, 17], [406, 66, 14], [406, 23, 20], [407, 10, 5], [407, 13, 13]] as const) {
+            const { g } = scriptContext({ player: newPlayer({ screen }) });
+            void trigger(screen, x, y)(g);
+            expect(g.destination).toBeNull();
+        }
     });
 
     test('every inn can be reached: outdoors, or a door leads into it', () => {
