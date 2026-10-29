@@ -7,10 +7,6 @@ import { berries, travelOffice, roshi } from '../scripts/town.ts';
 import { hallOfHeroes } from '../scripts/realm.ts';
 
 const screen: ScreenScripts<Flags, Shared> = {
-    // The hall of heroes' plaque.
-    show(g) {
-        g.overlay('{x 50}{y 18}{yellow}¶');
-    },
     triggers: {
         H: hallOfHeroes,
         X(g) {
