@@ -224,6 +224,13 @@ Each phase ends playable, tested and committed.
   12), and L has a Jobs column for a game whose flags have the engine's
   `jobsDone`.
 
+- **Bounty hunters** come after players with a price on their head: 1
+  step in 40 onto wild ground (`--hunter-odds`), away from safe screens,
+  whether random monsters are on or not (the engine's `ambush`). A hunter
+  is made from the player's own stats, give or take; one who wins
+  collects the bounty (it comes off the board), one who's beaten leaves
+  it. The news has both.
+
 ## Testing
 
 - Realm logic: several `FakeTerminal` sessions in one test.
