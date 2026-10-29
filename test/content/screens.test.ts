@@ -3,7 +3,8 @@
 import { describe, expect, test } from 'bun:test';
 import content from '../../content/index.ts';
 import { PORT_CITY_FARE } from '../../content/scripts/ferry.ts';
-import { newPlayer, pick, row, screenText, scriptContext, trigger } from '../helpers.ts';
+import { gameWorld, newPlayer, pick, placedScreens, row, screenText, scriptContext, trigger } from '../helpers.ts';
+import { GRID_HEIGHT, GRID_WIDTH } from '@fq2ts/engine/world';
 
 const show = (screen: number) => {
     const script = content.screens[screen]?.show;
@@ -159,6 +160,30 @@ describe('the ferry', () => {
         const poor = scriptContext({ player: newPlayer({ screen: 486, gold: 0 }), steps: ['enter', 'x'] });
         await trigger(486, 45, 6)(poor.g);
         expect(poor.g.destination).toBeNull();
+    });
+});
+
+describe('inns', () => {
+    test('the Red Dragon Inn: in from the town north of Port City, and out again', async () => {
+        const inn = scriptContext({ player: newPlayer({ screen: 406, x: 61, y: 9 }) });
+        await trigger(406, 61, 8)(inn.g);
+        expect(inn.g.destination).toEqual({ screen: 1122, x: 41, y: 17 });
+        const out = scriptContext({ player: newPlayer({ screen: 1122, x: 41, y: 17 }) });
+        await trigger(1122, 41, 18)(out.g);
+        expect(out.g.destination).toEqual({ screen: 406, x: 61, y: 9 });
+    });
+
+    test('every inn can be reached: outdoors, or a door leads into it', () => {
+        const world = gameWorld();
+        const inns = [...Array(GRID_WIDTH * GRID_HEIGHT).keys()].map((i) => i + 1).filter((n) => world.isInn(n));
+        expect(inns).toEqual([721, 724, 1042, 1122]);
+        // (A door's script says where it goes: "door to screen N at x,y".)
+        const doors = Object.values(placedScreens())
+            .flatMap((screen) => Object.values(screen?.at ?? {}))
+            .map((script) => (script && 'about' in script ? String(script.about) : ''));
+        for (const inn of inns) {
+            expect(world.isOutdoors(inn) || doors.some((about) => about.startsWith(`door to screen ${inn} `))).toBe(true);
+        }
     });
 });
 

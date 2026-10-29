@@ -2,6 +2,7 @@
   "screen": 724,
   "name": "The Unfinished Hotel",
   "kind": 2,
+  "inn": true,
   "tiles": [
     "       ♠                                                                     ♠ ",
     "                                                                               ",

@@ -210,8 +210,12 @@ Each phase ends playable, tested and committed.
   (it doesn't count as them playing), and they're sent a letter from
   whoever it was saying how it went. A player on 1 hitpoint can't be
   fought, so a beaten player isn't beaten again. Inns (screens marked
-  `"inn": true` in their map files, I in the editor's overview; in FQ2, the Red Dragon Inn's two
-  screens) are the only safe place to leave: Z there takes a room
+  `"inn": true` in their map files, I in the editor's overview) are the
+  only safe place to leave. In FQ2: your house in Stone Valley, the
+  hotel in Hill Valley, the bar in Port City, and the Red Dragon Inn (a
+  room through the inn's door in the walled town north of Port City,
+  screen 406; screens 1121-1125 are unused copies of that town). Z there
+  takes a room
   (`--inn-cost`, $20), saves and closes the connection, and the player
   is off the map until they're back. Each save keeps where it is and
   whether its player is asleep at an inn (database step 11).

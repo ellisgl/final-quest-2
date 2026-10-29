@@ -2,6 +2,7 @@
   "screen": 1042,
   "name": "The Bar",
   "kind": 2,
+  "inn": true,
   "tiles": [
     "                           ♠                                     ♠             ",
     "♠                                                               ♠              ",

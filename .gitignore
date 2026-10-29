@@ -11,3 +11,6 @@ plans_and_questions.txt
 
 # Maps exported for Icy Draw (bun run art export); the maps are data/maps.
 data/art/maps/
+# Other env files (.env.prod...): secrets, like .env. The example stays.
+.env.*
+!.env.example
