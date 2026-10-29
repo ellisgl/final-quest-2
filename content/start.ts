@@ -27,6 +27,10 @@ export type Flags = {
     // The day this player last lost (or ran) at the arena: no more fights
     // there until the next.
     arenaLostDay: string;
+    // Whether this player has slain the Wyrm (and is the Wyrmslayer), and
+    // the day they last used the Wyrmslayer's gift (U: a full heal, once a day).
+    wyrmslayer: boolean;
+    giftDay: string;
     // (And the player's delivery job, if they have one: scripts/jobs.ts.)
 } & JobFlags;
 
@@ -93,6 +97,8 @@ export const start: Player<Flags> = {
         foundMinigun: false,
         wyrmDay: '',
         arenaLostDay: '',
+        wyrmslayer: false,
+        giftDay: '',
         ...JOB_FLAGS,
     },
 };

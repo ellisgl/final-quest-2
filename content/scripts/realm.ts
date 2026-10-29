@@ -126,14 +126,57 @@ export async function wyrm(g: G): Promise<void> {
     g.gold += gold;
     g.exp += exp;
     hero(g, `${escapeMarkup(g.name)} slew the Wyrm (level ${level}).`);
+    const first = !g.flags.wyrmslayer;
+    becomeWyrmslayer(g);
     g.cls();
-    g.print('{yellow}You have slain the Wyrm!', '', `{white}Its hoard is yours: {yellow}$${gold}{white}, and {yellow}${exp}{white} experience.`, '', CONTINUE);
+    g.print(
+        '{yellow}You have slain the Wyrm!',
+        '',
+        `{white}Its hoard is yours: {yellow}$${gold}{white}, and {yellow}${exp}{white} experience.`,
+        ...(first ? ['', `{white}From now on you are {lightmagenta}${WYRMSLAYER}{white}, and the Wyrm's blood gives you a gift:`, '{white}once a day, press {yellow}U{white} to heal your wounds, wherever you are.'] : []),
+        '',
+        CONTINUE,
+    );
     await g.key();
+}
+
+// The title of those who've slain the Wyrm, and their gift: a full heal,
+// once a day, anywhere.
+export const WYRMSLAYER = 'the Wyrmslayer';
+
+function becomeWyrmslayer(g: G): void {
+    g.flags.wyrmslayer = true;
+    g.title = WYRMSLAYER;
+}
+
+// Whether the player has slain the Wyrm. Those who did before there were
+// titles are found on the hall of heroes, and made Wyrmslayers then.
+export function isWyrmslayer(g: G): boolean {
+    if (!g.flags.wyrmslayer && g.name && g.world.heroes.some((deed) => deed.startsWith(`${escapeMarkup(g.name)} slew the Wyrm (`))) {
+        becomeWyrmslayer(g);
+    }
+    return g.flags.wyrmslayer;
+}
+
+// U: the Wyrmslayer's gift.
+export function wyrmslayersGift(g: G): void {
+    if (!isWyrmslayer(g)) {
+        g.write('{gray}Only one who has slain the Wyrm has that gift.');
+    } else if (g.flags.giftDay === today()) {
+        g.write("{gray}The Wyrm's blood is quiet. Its gift comes again tomorrow.");
+    } else if (g.hp >= g.maxHp) {
+        g.write("{gray}You've no wounds for the Wyrm's blood to heal.");
+    } else {
+        g.flags.giftDay = today();
+        g.healFull();
+        g.write("{lightmagenta}The Wyrm's blood burns in you, and your wounds close.");
+    }
 }
 
 // F, anywhere: what the realm knows of its heroes and its wonders, the
 // hall of heroes, the castle's owners, and how the Wyrm is.
 export async function fame(g: G): Promise<void> {
+    isWyrmslayer(g);
     const { heroes, castleOwners, wyrmHp, wyrmLevel, wyrmSlainOn } = g.world;
     const wyrmIs = wyrmHp > 0
         ? `{white}Level ${wyrmLevel}: ${wyrmHp} of ${wyrmMaxHp(wyrmLevel)} hitpoints left.`

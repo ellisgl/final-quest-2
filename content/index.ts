@@ -6,7 +6,7 @@ import { newGame } from './story.ts';
 import { screens } from './screens/index.ts';
 import { shared, start, upgradeSave, type Flags, type Shared } from './start.ts';
 import { events } from './events.ts';
-import { fame } from './scripts/realm.ts';
+import { fame, wyrmslayersGift } from './scripts/realm.ts';
 
 const content: Content<Flags, Shared> = {
     title,
@@ -21,6 +21,7 @@ const content: Content<Flags, Shared> = {
     daily: ['hadDrink'],
     keys: {
         F: { help: 'fame: the hall of heroes, the castle and the Wyrm', run: fame },
+        U: { help: "the Wyrmslayer's gift: heal your wounds, once a day", run: wyrmslayersGift },
     },
     world: shared,
     screens,

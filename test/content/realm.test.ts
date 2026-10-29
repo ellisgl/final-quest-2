@@ -2,7 +2,7 @@
 
 import { afterEach, describe, expect, spyOn, test, type Mock } from 'bun:test';
 import { MemoryWorld } from '@fq2ts/engine/shared';
-import { WYRM_RETURNS_AFTER, daysBetween, fame, hallOfHeroes, today, wyrm, wyrmMaxHp } from '../../content/scripts/realm.ts';
+import { WYRMSLAYER, WYRM_RETURNS_AFTER, daysBetween, fame, hallOfHeroes, isWyrmslayer, today, wyrm, wyrmMaxHp, wyrmslayersGift } from '../../content/scripts/realm.ts';
 import { castle } from '../../content/scripts/places.ts';
 import { makeGame, newPlayer, pick, screenText, scriptContext } from '../helpers.ts';
 
@@ -71,6 +71,8 @@ describe('the Wyrm', () => {
         expect([g.gold, g.exp]).toEqual([5000, 1000]);
         expect(store.get('heroes')).toEqual([`Ann slew the Wyrm (level 1). {gray}(${today()})`]);
         expect(news).toEqual(['{yellow}Ann slew the Wyrm (level 1).']);
+        // And she's the Wyrmslayer, for good.
+        expect([g.title, g.flags.wyrmslayer]).toEqual([WYRMSLAYER, true]);
     });
 
     test("if someone else slays it during this one's fight, there's no reward", async () => {
@@ -117,6 +119,43 @@ describe('the Wyrm', () => {
         const { g } = scriptContext({ player: newPlayer(), steps: pick(1) });
         await wyrm(g);
         expect(g.flags.wyrmDay).toBe('');
+    });
+});
+
+describe('the Wyrmslayer', () => {
+    test('U heals fully once a day; not without wounds; and only for a Wyrmslayer', () => {
+        at(0);
+        const { g } = scriptContext({ player: newPlayer({ hp: 10 }, { wyrmslayer: true }) });
+        const write = spyOn(g, 'write');
+        wyrmslayersGift(g);
+        expect(g.hp).toBe(g.maxHp);
+        expect(write).toHaveBeenLastCalledWith("{lightmagenta}The Wyrm's blood burns in you, and your wounds close.");
+        g.hp = 10;
+        wyrmslayersGift(g);
+        expect(g.hp).toBe(10);
+        expect(write).toHaveBeenLastCalledWith("{gray}The Wyrm's blood is quiet. Its gift comes again tomorrow.");
+        at(1);
+        wyrmslayersGift(g);
+        expect(g.hp).toBe(g.maxHp);
+        at(2);
+        wyrmslayersGift(g);
+        expect(write).toHaveBeenLastCalledWith("{gray}You've no wounds for the Wyrm's blood to heal.");
+
+        const other = scriptContext({ player: newPlayer({ hp: 10 }) });
+        const said = spyOn(other.g, 'write');
+        wyrmslayersGift(other.g);
+        expect([other.g.hp, said.mock.calls.at(-1)?.[0]]).toEqual([10, '{gray}Only one who has slain the Wyrm has that gift.']);
+    });
+
+    test('those who slew it before there were titles are found on the hall of heroes', () => {
+        const store = new MemoryWorld();
+        store.set('heroes', ['Annie slew the Wyrm (level 1).', 'Ann slew the Wyrm (level 2). {gray}(2026-10-01)']);
+        const ann = scriptContext({ worldStore: store, player: newPlayer({ name: 'Ann' }) });
+        expect(isWyrmslayer(ann.g)).toBe(true);
+        expect([ann.g.title, ann.g.flags.wyrmslayer]).toEqual([WYRMSLAYER, true]);
+        const bo = scriptContext({ worldStore: store, player: newPlayer({ name: 'An' }) });
+        expect(isWyrmslayer(bo.g)).toBe(false);
+        expect(bo.g.title).toBe('');
     });
 });
 

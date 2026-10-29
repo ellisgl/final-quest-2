@@ -85,7 +85,7 @@ export async function inventory(g: G): Promise<void> {
         g.cls();
         const bank = g.flags.hasBankAccount ? `   {white}Bank {yellow}$${g.flags.bankGold}` : '';
         g.print(
-            `{yellow}{center}${g.name ? `${escapeMarkup(g.name)}'s Inventory` : 'Inventory'}`,
+            `{yellow}{center}${g.name ? `${escapeMarkup(g.name)}${g.title ? ` ${escapeMarkup(g.title)}` : ''}'s Inventory` : 'Inventory'}`,
             '',
             `{white}Experience {lightcyan}${g.exp}   {white}Hitpoints {lightred}${g.hp}/${g.maxHp}   {white}Gold {yellow}$${g.gold}${bank}`,
             `{white}Strength {lightcyan}${g.strength}   {white}Defense {lightcyan}${g.defense}`,
