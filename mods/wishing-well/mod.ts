@@ -18,7 +18,7 @@ export default {
     screens: {
         82: {
             show: (g) => {
-                g.overlay('{x 36}{y 18}{lightcyan}○');
+                g.overlay('{x 9}{y 9}{lightcyan}○');
             },
             at: {
                 '9,9': async (g, mod) => {
