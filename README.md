@@ -67,7 +67,7 @@ Players see each other on the map (☻) and hear when someone enters or leaves t
 
 ## Mods
 
-Mods add screens, items, monsters and scripts to the game without changing it. Each is a folder in `mods/` with a `mod.ts` (TypeScript, using the same `g` API as the game's scripts) and any data files; the game and the server load them when they start (`--mods DIR` for another folder). [mods/_wishing-well/](mods/_wishing-well/) is an example (rename it without the `_` to switch it on), and [docs/mods.md](docs/mods.md) explains how to write one. Mods are code: only install ones you trust.
+Mods add screens, items, monsters and scripts to the game without changing it. Each is a folder in `mods/` with a `mod.ts` (TypeScript, using the same `g` API as the game's scripts) and any data files; the game and the server load the ones named in `FQ2_ENABLE_MODS` (in `.env`, with commas between) when they start (`--mods DIR` for another folder). [mods/wishing-well/](mods/wishing-well/) is an example (`FQ2_ENABLE_MODS=wishing-well` switches it on), and [docs/mods.md](docs/mods.md) explains how to write one. Mods are code: only install ones you trust.
 
 ## Drawing the screens
 

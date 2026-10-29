@@ -1,21 +1,24 @@
 #!/usr/bin/env bun
-// Final Quest 2 -- run with:  bun fq2.ts [--debug] [--mods DIR]
+// Final Quest 2 -- run with:  bun fq2.ts [--debug] [--mods DIR] [--enable-mods LIST]
 // or: bun start / bun run debug
 //
-// Mods come from DIR, or the mods folder where the game is started, if
-// there is one (see @fq2ts/engine/mods).
+// The mods in LIST (or FQ2_ENABLE_MODS, in .env), folders' names with
+// commas between, come from DIR, or the mods folder where the game is
+// started (see @fq2ts/engine/mods). None are added unless they're listed.
 
 import { join, resolve } from 'node:path';
 import { Terminal } from '@fq2ts/engine/terminal';
 import { Saves } from '@fq2ts/engine/saves';
 import { Game } from '@fq2ts/engine/game';
 import { readGameData } from '@fq2ts/engine/data';
-import { applyMods, loadMods } from '@fq2ts/engine/mods';
+import { applyMods, loadMods, readModList } from '@fq2ts/engine/mods';
 
 const args = process.argv.slice(2);
 const debug = args.includes('--debug') || args.some((a) => a.toLowerCase() === '-debugmode');
 const modsAt = args.indexOf('--mods');
 const modsDir = resolve(modsAt >= 0 ? (args[modsAt + 1] ?? 'mods') : 'mods');
+const enableAt = args.indexOf('--enable-mods');
+const enabledMods = enableAt >= 0 ? args[enableAt + 1] : process.env['FQ2_ENABLE_MODS'];
 const root = import.meta.dir;
 
 // Load (and check) all the content, data and mods before taking over the
@@ -27,7 +30,7 @@ try {
     game = new Game({
         term: new Terminal({ name: 'Final Quest 2' }),
         config,
-        ...applyMods({ content, ...data }, await loadMods(modsDir)),
+        ...applyMods({ content, ...data }, await loadMods(modsDir, readModList(enabledMods, '--enable-mods (or FQ2_ENABLE_MODS)'))),
         saves: new Saves(join(root, 'saves')),
         debug,
     });

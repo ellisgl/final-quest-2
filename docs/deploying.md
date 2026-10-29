@@ -206,6 +206,8 @@ might go back.
 
 ## Mods
 
-Mods go in `mods/` (or `FQ2_MODS`), and the server lists the ones it loads.
+Mods go in `mods/` (or `FQ2_MODS`), and only the ones named in
+`FQ2_ENABLE_MODS` (`wishing-well,other-mod`) are loaded; the server lists
+them as it starts.
 They're code, run with the server's permissions: only install mods you
 trust. See [mods.md](mods.md).

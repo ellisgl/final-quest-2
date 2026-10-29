@@ -5,25 +5,28 @@ on existing screens, items, monsters, and its own saved state. Mods are
 TypeScript (or JavaScript) modules, so they can do anything the game's own
 scripts do, through the same `g` API.
 
-The example in [mods/_wishing-well/](../mods/_wishing-well/) puts a
-wishing well in Stone Valley. It's switched off (its folder name starts
-with `_`); rename the folder to `wishing-well` to play with it.
+The example in [mods/wishing-well/](../mods/wishing-well/) puts a
+wishing well in Stone Valley. It's switched off; set
+`FQ2_ENABLE_MODS=wishing-well` in `.env` to play with it.
 
 > Mods are code, run with the game's own permissions, like the add-ons of a
 > BBS door game. Only install mods you trust.
 
 ## Installing and switching off
 
-Each mod is a folder in `mods/`, where the game or server is started:
+Each mod is a folder in `mods/`, where the game or server is started. Only
+the ones named in `FQ2_ENABLE_MODS` in `.env` (folders' names, with commas
+between) are added; the rest are left alone, and their code never runs:
 
 ```sh
-bun start                          # mods from ./mods, if there is a ./mods
-bun start --mods ~/fq2-mods        # or from somewhere else
-bun run server --mods /srv/mods    # the same for the server (or FQ2_MODS in .env)
+FQ2_ENABLE_MODS=wishing-well,my-mod            # in .env: these two
+bun start --enable-mods wishing-well           # or on the command line
+bun start --mods ~/fq2-mods                    # mods from somewhere else
+bun run server --mods /srv/mods                # the same for the server (or FQ2_MODS in .env)
 ```
 
-A folder whose name starts with `_` or `.` is left out, so renaming
-`my-mod` to `_my-mod` switches it off. The server logs each mod it adds
+Taking a mod out of the list switches it off. A name with no folder is an
+error. The server logs each mod it adds
 (`Mod: The Wishing Well 1.0.0 (wishing-well)`), and a mod that can't be
 added stops the game or server with a message saying why.
 

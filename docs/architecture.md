@@ -175,7 +175,7 @@ database, and one world for everyone.
 ## Mods
 
 A mod is a folder with a `mod.ts`. Before the `Game` is made, `loadMods`
-imports each one, and `applyMods` adds it to the game: its items, monsters,
+imports each one that's enabled (`FQ2_ENABLE_MODS`), and `applyMods` adds it to the game: its items, monsters,
 maps and scripts merged in, its flags and world state kept apart under its
 own name. The game only ever sees the merged content, so to it a mod is
 just more content.
