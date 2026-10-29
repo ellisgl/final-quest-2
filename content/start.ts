@@ -24,6 +24,9 @@ export type Flags = {
     foundMinigun: boolean;
     // The day this player last fought the Wyrm (once a day).
     wyrmDay: string;
+    // The day this player last lost (or ran) at the arena: no more fights
+    // there until the next.
+    arenaLostDay: string;
     // (And the player's delivery job, if they have one: scripts/jobs.ts.)
 } & JobFlags;
 
@@ -89,6 +92,7 @@ export const start: Player<Flags> = {
         hadDrink: false,
         foundMinigun: false,
         wyrmDay: '',
+        arenaLostDay: '',
         ...JOB_FLAGS,
     },
 };

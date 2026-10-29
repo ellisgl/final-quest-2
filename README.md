@@ -32,6 +32,10 @@ Items are defined in `data/items.json` and monsters and encounter tables in `dat
 
 The old woman in your house (once she's offered her cocoa), the nurse at Hill Valley's healer's hut, the man by the fire in the Moorish village and Port City's bartender have work: deliveries to one of the others, for $40-$100 and more the more you've done, as in LORD II's jobs. One at a time, 4 offers a day, and a bonus for delivering the same day. The inventory (I) shows the job you're on and how many you've done. They work the same alone and on the server, where the news says who made deliveries and L ranks how many each player has done. ([content/scripts/jobs.ts](content/scripts/jobs.ts) has what each of them says.)
 
+## The arena
+
+By the castle gates, west of the moat, is the arena: $50 a fight against a gladiator made from your own strength, gear and hitpoints (give or take, so it's always a close thing), and $100 back if you win. Win, and you can go again; lose or run, and the crowd won't have you back until tomorrow. Three wins in a row or more make the news. ([content/scripts/arena.ts](content/scripts/arena.ts).)
+
 ## Multiplayer server
 
 ```sh
