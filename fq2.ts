@@ -12,6 +12,7 @@ import { Saves } from '@fq2ts/engine/saves';
 import { Game } from '@fq2ts/engine/game';
 import { readGameData } from '@fq2ts/engine/data';
 import { applyMods, loadMods, readModList } from '@fq2ts/engine/mods';
+import { mapSize } from '@fq2ts/engine/world';
 
 const args = process.argv.slice(2);
 const debug = args.includes('--debug') || args.some((a) => a.toLowerCase() === '-debugmode');
@@ -28,9 +29,10 @@ try {
     const { default: content } = await import('./content/index.ts');
     const { config, ...data } = readGameData(join(root, 'data'));
     game = new Game({
-        term: new Terminal({ name: 'Final Quest 2' }),
+        // (The screen is the size config.json says: 80x25.)
+        term: new Terminal({ name: 'Final Quest 2', size: config.screen }),
         config,
-        ...applyMods({ content, ...data }, await loadMods(modsDir, readModList(enabledMods, '--enable-mods (or FQ2_ENABLE_MODS)'))),
+        ...applyMods({ content, ...data }, await loadMods(modsDir, readModList(enabledMods, '--enable-mods (or FQ2_ENABLE_MODS)'), mapSize(config.screen))),
         saves: new Saves(join(root, 'saves')),
         debug,
     });

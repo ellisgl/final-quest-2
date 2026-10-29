@@ -3,12 +3,12 @@
 
 import { Terminal } from '@fq2ts/engine/terminal';
 import { main as edit } from '@fq2ts/tools/edit';
-import { fq2 } from './files.ts';
+import { fq2, screen } from './files.ts';
 
-export const main = (args: readonly string[], term: Terminal = new Terminal(), log: (line: string) => void = console.log): Promise<number> => edit(args, fq2, term, log);
+export const main = (args: readonly string[], term: Terminal = new Terminal({ size: screen }), log: (line: string) => void = console.log): Promise<number> => edit(args, fq2, term, log);
 
 if (import.meta.main) {
-    const term = new Terminal({ name: 'The level editor' });
+    const term = new Terminal({ name: 'The level editor', size: screen });
     term.onInterrupt = () => {
         term.stop();
         process.exit(130);
