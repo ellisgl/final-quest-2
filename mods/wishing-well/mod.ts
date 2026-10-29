@@ -18,10 +18,10 @@ export default {
     screens: {
         82: {
             show: (g) => {
-                g.overlay('{x 9}{y 9}{lightcyan}○');
+                g.overlay('{x 10}{y 10}{lightcyan}○');
             },
             at: {
-                '9,9': async (g, mod) => {
+                '10,10': async (g, mod) => {
                     g.cls();
                     g.print('{lightcyan}An old stone well. Coins glint at the bottom.', '');
                     if ((await g.choice(['Toss in a gold coin and make a wish', 'Walk on'])) !== 0 || !(await g.spend(1))) {
