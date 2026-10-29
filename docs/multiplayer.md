@@ -217,7 +217,7 @@ Each phase ends playable, tested and committed.
   Stone Valley. FQ2's inns: the
   hotel in Hill Valley, the bar in Port City, and the Red Dragon Inn (a
   room through the inn's door in the walled town north of Port City,
-  screen 406; screens 1121-1125 are unused copies of that town). Z there
+  screen 406). Z there
   takes a room
   (`--inn-cost`, $20), saves and closes the connection, and the player
   is off the map until they're back. Each save keeps where it is and
