@@ -21,7 +21,7 @@ export default {
                 g.overlay('{x 36}{y 18}{lightcyan}○');
             },
             at: {
-                '36,18': async (g, mod) => {
+                '9,9': async (g, mod) => {
                     g.cls();
                     g.print('{lightcyan}An old stone well. Coins glint at the bottom.', '');
                     if ((await g.choice(['Toss in a gold coin and make a wish', 'Walk on'])) !== 0 || !(await g.spend(1))) {
