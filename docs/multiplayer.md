@@ -210,7 +210,7 @@ Each phase ends playable, tested and committed.
   (it doesn't count as them playing), and they're sent a letter from
   whoever it was saying how it went. A player on 1 hitpoint can't be
   fought, so a beaten player isn't beaten again. Inns (screens marked
-  `"inn": true` in their map files; in FQ2, the Red Dragon Inn's two
+  `"inn": true` in their map files, I in the editor's overview; in FQ2, the Red Dragon Inn's two
   screens) are the only safe place to leave: Z there takes a room
   (`--inn-cost`, $20), saves and closes the connection, and the player
   is off the map until they're back. Each save keeps where it is and
