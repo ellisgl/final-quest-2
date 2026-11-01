@@ -14,3 +14,8 @@ data/art/maps/
 # Other env files (.env.prod...): secrets, like .env. The example stays.
 .env.*
 !.env.example
+
+# Binaries built with Perry (perry compile fq2.ts / server.ts).
+/fq2
+/fq2-server
+/server

@@ -20,7 +20,7 @@ const modsAt = args.indexOf('--mods');
 const modsDir = resolve(modsAt >= 0 ? (args[modsAt + 1] ?? 'mods') : 'mods');
 const enableAt = args.indexOf('--enable-mods');
 const enabledMods = enableAt >= 0 ? args[enableAt + 1] : process.env['FQ2_ENABLE_MODS'];
-const root = import.meta.dir;
+const root = import.meta.dirname;
 
 // Load (and check) all the content, data and mods before taking over the
 // terminal, so that errors (a wrong .env setting, say) are readable.

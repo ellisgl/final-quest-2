@@ -16,7 +16,7 @@ import { alignmentText } from './scripts/deeds.ts';
 // from config.json goes: each @TITLE@, @VERSION@, @REVISION@ and @COMPANY@
 // in a tag's replacement is filled in (data/art/final-quest-2.toml lists
 // them for Icy Draw).
-const art = (name: string): Icy => readIcy(readFileSync(join(import.meta.dir, '../data/art', name)));
+const art = (name: string): Icy => readIcy(readFileSync(join(import.meta.dirname, '../data/art', name)));
 const titleArt = art('title.icy');
 const helpArt = art('help.icy');
 const creditsArt = art('credits.icy');
