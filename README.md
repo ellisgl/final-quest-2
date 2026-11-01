@@ -20,7 +20,9 @@ bun start              # or: bun fq2.ts
 bun run debug          # or: bun fq2.ts --debug   (position display, S = settings editor)
 ```
 
-Saved games go to `saves/` as JSON (`--saves DIR` for another folder). `--player NAME` starts new games as NAME without asking for one. Together they let the game run as a BBS door: each caller gets their own save slots and plays under their BBS name. The game draws in true colour, 256 colours or 16, depending on what the terminal says it supports (`COLORTERM` and `TERM`). Set `FQ2_COLORS` to `true`, `256` or `16` to choose for yourself.
+Saved games go to `saves/` as JSON (`--saves DIR` for another folder). `--player NAME` starts new games as NAME without asking for one. Together they let the game run as a BBS door: each caller gets their own save slots and plays under their BBS name.
+
+[Perry](https://github.com/PerryTS/perry) can compile the game into one binary: `perry compile fq2.ts` writes `fq2`. The binary reads `data/` from its own folder, so to install it somewhere else, copy `fq2` and `data/` together. Mods don't work in a compiled build (they're loaded as code when the game starts). Perry doesn't read `.env` either, so set those settings in the environment. The game draws in true colour, 256 colours or 16, depending on what the terminal says it supports (`COLORTERM` and `TERM`). Set `FQ2_COLORS` to `true`, `256` or `16` to choose for yourself.
 
 While exploring: arrows (or 8 4 6 2) walk, **I** or **V** shows your stats and inventory (pick an item to use, equip or drop it), **M** the world map (what you've seen of it: each outdoor screen you've been to and the ones around it; the rest is dark until you find it), **B** the last messages, **R** redraws the screen, **?** lists the keys and **Esc** goes back to the title menu.
 

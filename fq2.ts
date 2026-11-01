@@ -19,6 +19,7 @@ import { readGameData } from '@fq2ts/engine/data';
 import { applyMods, loadMods, readModList } from '@fq2ts/engine/mods';
 import { mapSize } from '@fq2ts/engine/world';
 import { NAME_LENGTH } from './content/story.ts';
+import { ROOT } from './content/root.ts';
 
 const args = process.argv.slice(2);
 const debug = args.includes('--debug') || args.some((a) => a.toLowerCase() === '-debugmode');
@@ -29,8 +30,7 @@ const enabledMods = enableAt >= 0 ? args[enableAt + 1] : process.env['FQ2_ENABLE
 const savesAt = args.indexOf('--saves');
 const playerAt = args.indexOf('--player');
 const player = playerAt >= 0 ? (args[playerAt + 1] ?? '').trim().slice(0, NAME_LENGTH) : '';
-const root = import.meta.dirname;
-const savesDir = savesAt >= 0 ? resolve(args[savesAt + 1] ?? 'saves') : join(root, 'saves');
+const savesDir = savesAt >= 0 ? resolve(args[savesAt + 1] ?? 'saves') : join(ROOT, 'saves');
 
 // Load (and check) all the content, data and mods before taking over the
 // terminal, so that errors (a wrong .env setting, say) are readable.
@@ -39,7 +39,7 @@ try {
     const { default: fq2 } = await import('./content/index.ts');
     // A new game's player already has a name, so the story doesn't ask.
     const content = player ? { ...fq2, start: { ...fq2.start, name: player } } : fq2;
-    const { config, ...data } = readGameData(join(root, 'data'));
+    const { config, ...data } = readGameData(join(ROOT, 'data'));
     game = new Game({
         // (The screen is the size config.json says: 80x25.)
         term: new Terminal({ name: 'Final Quest 2', size: config.screen }),

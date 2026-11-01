@@ -9,6 +9,7 @@ import type { Config, Content } from '@fq2ts/engine/game';
 import type { Player } from '@fq2ts/engine/player';
 import type { ItemDef } from '@fq2ts/engine/items';
 import type { Flags, G, Shared } from './start.ts';
+import { ROOT } from './root.ts';
 import { jobs } from './scripts/jobs.ts';
 import { alignmentText } from './scripts/deeds.ts';
 
@@ -16,7 +17,7 @@ import { alignmentText } from './scripts/deeds.ts';
 // from config.json goes: each @TITLE@, @VERSION@, @REVISION@ and @COMPANY@
 // in a tag's replacement is filled in (data/art/final-quest-2.toml lists
 // them for Icy Draw).
-const art = (name: string): Icy => readIcy(readFileSync(join(import.meta.dirname, '../data/art', name)));
+const art = (name: string): Icy => readIcy(readFileSync(join(ROOT, 'data', 'art', name)));
 const titleArt = art('title.icy');
 const helpArt = art('help.icy');
 const creditsArt = art('credits.icy');
