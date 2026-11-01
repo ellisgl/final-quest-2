@@ -30,6 +30,16 @@ error. The server logs each mod it adds
 (`Mod: The Wishing Well 1.0.0 (wishing-well)`), and a mod that can't be
 added stops the game or server with a message saying why.
 
+## In a compiled game
+
+A game compiled with Perry (see the README) can't load a mod's code when
+it starts, so every mod in `mods/` has its code built in, listed in
+[built-in-mods.ts](../built-in-mods.ts). After adding or removing a mod
+folder, run `bun run mods:list` before compiling (a test fails until you
+do). `FQ2_ENABLE_MODS` still decides which ones run, and their JSON files
+and maps are still read from `mods/` next to the binary. A change to a
+mod's `mod.ts` needs a new compile.
+
 ## A mod's folder
 
 ```

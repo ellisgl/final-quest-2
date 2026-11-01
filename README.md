@@ -22,13 +22,54 @@ bun run debug          # or: bun fq2.ts --debug   (position display, S = setting
 
 Saved games go to `saves/` as JSON (`--saves DIR` for another folder). `--player NAME` starts new games as NAME without asking for one. Together they let the game run as a BBS door: each caller gets their own save slots and plays under their BBS name.
 
-[Perry](https://github.com/PerryTS/perry) can compile the game into one binary: `perry compile fq2.ts` writes `fq2`. The binary reads `data/` from its own folder, so to install it somewhere else, copy `fq2` and `data/` together. Mods don't work in a compiled build (they're loaded as code when the game starts). Perry doesn't read `.env` either, so set those settings in the environment. The game draws in true colour, 256 colours or 16, depending on what the terminal says it supports (`COLORTERM` and `TERM`). Set `FQ2_COLORS` to `true`, `256` or `16` to choose for yourself.
+The game draws in true colour, 256 colours or 16, depending on what the terminal says it supports (`COLORTERM` and `TERM`). Set `FQ2_COLORS` to `true`, `256` or `16` to choose for yourself.
 
 While exploring: arrows (or 8 4 6 2) walk, **I** or **V** shows your stats and inventory (pick an item to use, equip or drop it), **M** the world map (what you've seen of it: each outdoor screen you've been to and the ones around it; the rest is dark until you find it), **B** the last messages, **R** redraws the screen, **?** lists the keys and **Esc** goes back to the title menu.
 
 Text and maps are Unicode (UTF-8): a map cell can hold any character one column wide (letters with accents, Greek, Cyrillic, box drawing, blocks, symbols...), but not wide ones like emoji or CJK, which would put the screen out of line. Anything that doesn't fit a cell is shown as `?`.
 
 Items are defined in `data/items.json` and monsters and encounter tables in `data/monsters.json`.
+
+### Compiling with Perry
+
+[Perry](https://github.com/PerryTS/perry) compiles the game into one native binary, with no Bun needed to run it:
+
+```sh
+bun run mods:list      # only after adding or removing a folder in mods/
+perry compile fq2.ts   # writes fq2
+```
+
+The binary reads `data/` and `mods/` from its own folder. To install it somewhere else, copy `fq2`, `data/` and `mods/` together; a mod's `mod.ts` can be left out. A binary runs on Linux machines like the one it was built on (x86-64 with glibc 2.39 or newer, if built on Ubuntu 24.04 or later); for anything else, build it there.
+
+A compiled game can't load code when it runs, so the code of every mod in `mods/` is built in. [built-in-mods.ts](built-in-mods.ts) lists them, `bun run mods:list` rewrites it, and a test fails if it's out of date. `FQ2_ENABLE_MODS` still picks which ones run. A mod that isn't built in can't be switched on: the game says which ones are. Changing a mod's code means compiling again; its JSON files and maps are read when the game starts. Perry doesn't read `.env`, so set those settings in the environment.
+
+### As a BBS door (ENiGMA½)
+
+The game can run as a door on an [ENiGMA½](https://github.com/NuSkooler/enigma-bbs) BBS, through its `abracadabra` module (see ENiGMA½'s [local doors](https://enigma-bbs.github.io/doors/scripts-and-binaries/) docs). ENiGMA½ runs the door in a pseudo-terminal the size of the caller's, so the game works as it does in a terminal window. For example, in the BBS's menu config:
+
+```hjson
+doorFinalQuest2: {
+    desc: Final Quest 2
+    module: abracadabra
+    config: {
+        name: FinalQuest2
+        cmd: /opt/fq2/fq2
+        args: [ "--saves", "{userAreaDir}", "--player", "{userNameRaw}" ]
+        io: stdio
+        encoding: utf8
+        env: { FQ2_COLORS: "16", TERM: "ansi" }
+        nodeMax: 8
+    }
+}
+```
+
+- `cmd` is the Perry binary (above), installed with `data/` and `mods/` in `/opt/fq2/`. With Bun instead: `cmd: /usr/local/bin/bun` and `args: [ "/opt/final-quest-2/fq2.ts", "--saves", ... ]`.
+- `--saves {userAreaDir}` gives each caller their own save slots, and `--player {userNameRaw}` starts their new games under their BBS name.
+- `encoding: utf8`: the game writes UTF-8, and ENiGMA½ converts it to the caller's terminal (CP437, say). The game's box drawing, blocks and shading are all CP437 characters. A few symbols (☺ ☻ ♠ ♣ ¶ ○ ⌂ and the arrows) are CP437 glyphs whose bytes are also control codes, so they may not come through on every BBS terminal: try it with your callers' clients.
+- `env` replaces the BBS's own environment, so it has to hold every setting the game needs (`FQ2_ENABLE_MODS` for mods, say). `FQ2_COLORS: "16"` keeps to the 16 ANSI colours that BBS terminals all show.
+- Callers need an 80x25 terminal: the game says so and goes back to the BBS on a smaller one (80x24, as many telnet clients have, or SyncTERM with its status line on).
+
+This is the single-player game: each caller has their own world. The multiplayer realm only takes web connections for now.
 
 ## Jobs
 

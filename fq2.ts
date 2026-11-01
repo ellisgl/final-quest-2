@@ -10,6 +10,8 @@
 // The mods in LIST (or FQ2_ENABLE_MODS, in .env), folders' names with
 // commas between, come from DIR, or the mods folder where the game is
 // started (see @fq2ts/engine/mods). None are added unless they're listed.
+// Compiled with Perry, the game has the code of the mods in mods/ built in
+// (built-in-mods.ts: bun run mods:list), and only those can be listed.
 
 import { join, resolve } from 'node:path';
 import { Terminal } from '@fq2ts/engine/terminal';
@@ -20,11 +22,15 @@ import { applyMods, loadMods, readModList } from '@fq2ts/engine/mods';
 import { mapSize } from '@fq2ts/engine/world';
 import { NAME_LENGTH } from './content/story.ts';
 import { ROOT } from './content/root.ts';
+import { BUILT_IN_MODS } from './built-in-mods.ts';
 
 const args = process.argv.slice(2);
 const debug = args.includes('--debug') || args.some((a) => a.toLowerCase() === '-debugmode');
 const modsAt = args.indexOf('--mods');
-const modsDir = resolve(modsAt >= 0 ? (args[modsAt + 1] ?? 'mods') : 'mods');
+// A compiled game has its mods' code built in (built-in-mods.ts), and looks
+// for their folders next to the binary, like data/.
+const compiled = process.versions['perry'] !== undefined;
+const modsDir = modsAt >= 0 ? resolve(args[modsAt + 1] ?? 'mods') : compiled ? join(ROOT, 'mods') : resolve('mods');
 const enableAt = args.indexOf('--enable-mods');
 const enabledMods = enableAt >= 0 ? args[enableAt + 1] : process.env['FQ2_ENABLE_MODS'];
 const savesAt = args.indexOf('--saves');
@@ -44,7 +50,7 @@ try {
         // (The screen is the size config.json says: 80x25.)
         term: new Terminal({ name: 'Final Quest 2', size: config.screen }),
         config,
-        ...applyMods({ content, ...data }, await loadMods(modsDir, readModList(enabledMods, '--enable-mods (or FQ2_ENABLE_MODS)'), mapSize(config.screen))),
+        ...applyMods({ content, ...data }, await loadMods(modsDir, readModList(enabledMods, '--enable-mods (or FQ2_ENABLE_MODS)'), mapSize(config.screen), compiled ? { builtIn: BUILT_IN_MODS, builtInOnly: true } : {})),
         saves: new Saves(savesDir),
         debug,
     });

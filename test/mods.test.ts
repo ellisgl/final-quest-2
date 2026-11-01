@@ -2,12 +2,14 @@
 // load and fit (enabled or not), and the example plays.
 
 import { afterEach, expect, spyOn, test, type Mock } from 'bun:test';
-import { readdirSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
-import { applyMods, loadMod, type ModdableGame } from '@fq2ts/engine/mods';
+import { applyMods, loadMod, loadMods, type ModdableGame } from '@fq2ts/engine/mods';
 import { makeGameWith } from '@fq2ts/engine/fixture';
 import content from '../content/index.ts';
 import type { Flags, Shared } from '../content/start.ts';
+import { BUILT_IN_MODS } from '../built-in-mods.ts';
+import { LIST, builtInModsSource, modFolders } from '../tools/mods.ts';
 import { bestiary, config, gameWorld, itemCatalogue, newPlayer, pick, screenText } from './helpers.ts';
 
 const MODS = join(import.meta.dir, '..', 'mods');
@@ -25,6 +27,21 @@ test('every mod in mods/ loads and fits the game', async () => {
     for (const folder of folders) {
         applyMods(fq2(), [await loadMod(join(MODS, folder.name))]);
     }
+});
+
+test('built-in-mods.ts lists every mod in mods/ (else: bun run mods:list)', () => {
+    expect(readFileSync(LIST, 'utf8')).toBe(builtInModsSource(MODS));
+});
+
+test('the built-in mods are their folders\' mod.ts, and load as a compiled game loads them', async () => {
+    const names = modFolders(MODS);
+    for (const name of names) {
+        const load = BUILT_IN_MODS[name];
+        expect(load).toBeFunction();
+        expect(await load?.()).toBe(await import(join(MODS, name, 'mod.ts')));
+    }
+    const mods = await loadMods(MODS, names, undefined, { builtIn: BUILT_IN_MODS, builtInOnly: true });
+    expect(mods.map((m) => m.dir).sort()).toEqual(names.map((name) => join(MODS, name)));
 });
 
 // FQ2 with the wishing well, and a player just north of it with some gold.

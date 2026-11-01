@@ -6,12 +6,12 @@
   "type": "module",
   "license": "MIT",
   "dependencies": {
-    "@fq2ts/engine": "github:ellisgl/fq2ts-engine#0b1413abb7a02c94761a6c0f8fadaef805fa22d9",
+    "@fq2ts/engine": "github:ellisgl/fq2ts-engine#b98aa4cab5c27c4447695bd7cd619ba9089e8dd5",
     "@fq2ts/server": "github:ellisgl/fq2ts-server#v0.15.1",
     "@fq2ts/tools": "github:ellisgl/fq2ts-tools#v0.6.0"
   },
   "overrides": {
-    "@fq2ts/engine": "github:ellisgl/fq2ts-engine#0b1413abb7a02c94761a6c0f8fadaef805fa22d9"
+    "@fq2ts/engine": "github:ellisgl/fq2ts-engine#b98aa4cab5c27c4447695bd7cd619ba9089e8dd5"
   },
   "scripts": {
     "start": "bun fq2.ts",
@@ -22,6 +22,7 @@
     "generate": "bun tools/generate.ts",
     "view": "bun tools/view.ts",
     "art": "bun tools/art.ts",
+    "mods:list": "bun tools/mods.ts",
     "test": "bun test",
     "coverage": "bun test --coverage",
     "check": "tsc && eslint . && bun test"
